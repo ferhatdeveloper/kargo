@@ -4,7 +4,7 @@
  * exit 0 = başarılı
  */
 const BASE = process.env.POSTGREST_URL || 'http://127.0.0.1:3000'
-const EMAIL = process.env.DEMO_EMAIL || 'demo@stocado.local'
+const EMAIL = process.env.DEMO_EMAIL || 'demo@navlun.local'
 const PASS = process.env.DEMO_PASSWORD || 'Demo123!'
 
 async function post(path, body, token) {
@@ -59,6 +59,31 @@ async function main() {
   )
   if (typeof cargos.total !== 'number') throw new Error('cargos missing total')
   console.log('  account_cargos_query OK total=', cargos.total)
+
+  const quote = await post(
+    '/rpc/account_cargo_quote',
+    {
+      p_account_id: accountId,
+      p_length_cm: 30,
+      p_width_cm: 20,
+      p_height_cm: 15,
+      p_weight_kg: 2,
+      p_desi: null,
+      p_pay_on_delivery: false,
+      p_pod_amount: null,
+    },
+    login.token,
+  )
+  if (!quote.quotes?.length) throw new Error('cargo_quote empty')
+  console.log('  account_cargo_quote OK', quote.quotes.length, 'carrier(s)')
+
+  const addresses = await post(
+    '/rpc/account_addresses_query',
+    { p_account_id: accountId },
+    login.token,
+  )
+  if (!Array.isArray(addresses)) throw new Error('addresses not array')
+  console.log('  account_addresses_query OK', addresses.length, 'address(es)')
 
   console.log('All smoke checks passed.')
 }

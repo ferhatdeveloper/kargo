@@ -12,8 +12,8 @@
 
 | Service | Required | Port | Notes |
 |---------|----------|------|--------|
-| Vite dev server (`portal`) | Yes (for UI work) | 5173 | Varsayılan: harici API proxy (`vite.config.ts`) |
-| PostgreSQL + PostgREST | Optional (yerel API) | 5432 / 3000 | `docker compose up -d` |
+| Vite dev server (`portal`) | Yes (for UI work) | 5173 | `/api` → PostgREST (`vite.config.ts`) |
+| PostgreSQL + PostgREST | Yes (API) | 5432 / 3000 | `docker compose up -d` |
 
 ### Commands (from repo root)
 
@@ -27,7 +27,7 @@ All commands run inside `portal/` — see root `README.md`.
 
 ### Environment
 
-- `portal/.env` — `VITE_API_BACKEND=postgrest` + `VITE_API_BASE_URL=/api` (bkz. `.env.example`)
+- **API:** yalnızca PostgREST — `portal/.env`: `VITE_API_BACKEND=postgrest`, `VITE_API_BASE_URL=/api` (bkz. `.env.example`)
 - Yerel giriş: `demo@navlun.local` / `Demo123!` (`docker compose up -d` gerekir)
 - Oturum token’larını repoya commit etmeyin.
 

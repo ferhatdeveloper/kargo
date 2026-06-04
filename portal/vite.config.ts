@@ -4,8 +4,14 @@ import path from 'path'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const usePostgrest = env.VITE_API_BACKEND === 'postgrest'
+  const backend = env.VITE_API_BACKEND?.trim() || 'postgrest'
   const postgrestTarget = env.VITE_POSTGREST_URL?.trim() || 'http://127.0.0.1:3000'
+
+  if (backend !== 'postgrest') {
+    console.warn(
+      `[vite] VITE_API_BACKEND=${backend} — Navlun yalnızca PostgREST destekler; proxy PostgREST'e yönlendiriliyor.`,
+    )
+  }
 
   return {
     plugins: [react()],
@@ -15,21 +21,13 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      proxy: usePostgrest
-        ? {
-            '/api': {
-              target: postgrestTarget,
-              changeOrigin: true,
-              rewrite: (p) => p.replace(/^\/api/, ''),
-            },
-          }
-        : {
-            '/api': {
-              target: 'https://api.kargopaneli.com',
-              changeOrigin: true,
-              rewrite: (p) => p.replace(/^\/api/, '/v1'),
-            },
-          },
+      proxy: {
+        '/api': {
+          target: postgrestTarget,
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/api/, ''),
+        },
+      },
     },
   }
 })
