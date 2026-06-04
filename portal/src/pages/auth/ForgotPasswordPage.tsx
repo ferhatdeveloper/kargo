@@ -1,15 +1,18 @@
-import { Anchor, Box, Button, Paper, Text, TextInput, Title } from '@mantine/core'
+import { Anchor, Button, Paper, Text, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { Link, useNavigate } from 'react-router-dom'
 import { forgotPassword } from '@/api/auth'
+import { useLocale } from '@/context/LocaleContext'
+import formClasses from './authForm.module.css'
 
 export function ForgotPasswordPage() {
+  const { t } = useLocale()
   const navigate = useNavigate()
   const form = useForm({
     initialValues: { email: '' },
     validate: {
-      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'E-posta adresi geçerli değil'),
+      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'Invalid email'),
     },
   })
 
@@ -18,36 +21,43 @@ export function ForgotPasswordPage() {
       await forgotPassword(values.email)
       notifications.show({
         color: 'green',
-        title: 'E-posta gönderildi',
-        message: 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.',
+        title: t('auth.email'),
+        message: t('auth.forgotSubtitle'),
       })
-      navigate('/tr/auth/login')
+      navigate('/auth/login')
     } catch {
       notifications.show({
         color: 'red',
-        title: 'Hata',
-        message: 'İşlem tamamlanamadı. Lütfen tekrar deneyin.',
+        title: 'Error',
+        message: 'Request failed',
       })
     }
   })
 
   return (
-    <Box>
-      <Title ta="center">Şifrenizi mi unuttunuz?</Title>
-      <Text c="dimmed" size="sm" ta="center" mt={5}>
-        E-posta adresinizi girin, size şifrenizi sıfırlamak için bir bağlantı göndereceğiz.
-      </Text>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md" miw={400} maw="90%">
+    <div className={formClasses.wrapper}>
+      <header className={formClasses.header}>
+        <Title order={2} className={formClasses.title}>
+          {t('auth.forgotTitle')}
+        </Title>
+        <Text className={formClasses.subtitle}>{t('auth.forgotSubtitle')}</Text>
+      </header>
+      <Paper className={formClasses.card} radius="lg">
         <form onSubmit={handleSubmit}>
-          <TextInput label="E-posta" placeholder="E-posta" required {...form.getInputProps('email')} />
-          <Button type="submit" fullWidth mt="xl" loading={form.submitting}>
-            Sıfırlama bağlantısı gönder
+          <TextInput
+            label={t('auth.email')}
+            placeholder={t('auth.emailPlaceholder')}
+            required
+            {...form.getInputProps('email')}
+          />
+          <Button type="submit" fullWidth mt="xl" loading={form.submitting} className={formClasses.primaryButton}>
+            {t('auth.forgot')}
           </Button>
-          <Anchor component={Link} to="/tr/auth/login" size="sm" display="block" ta="center" mt="md">
-            Giriş sayfasına dön
+          <Anchor component={Link} to="/auth/login" size="sm" display="block" ta="center" mt="md">
+            {t('auth.backToLogin')}
           </Anchor>
         </form>
       </Paper>
-    </Box>
+    </div>
   )
 }

@@ -16,29 +16,31 @@ import { Link, useNavigate } from 'react-router-dom'
 import { isPostgrest } from '@/api/config'
 import { Logo } from '@/components/Logo'
 import { useAuth } from '@/context/AuthContext'
+import { useLocale } from '@/context/LocaleContext'
 import formClasses from './authForm.module.css'
 import classes from './LoginPage.module.css'
 
 export function LoginPage() {
   const { login } = useAuth()
+  const { t } = useLocale()
   const navigate = useNavigate()
   const form = useForm({
     initialValues: { email: '', password: '', remember: false },
     validate: {
-      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'E-posta adresi geçerli değil'),
-      password: (v) => (v.trim().length >= 6 ? null : 'Şifre en az 6 karakter olmalıdır'),
+      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'Invalid email'),
+      password: (v) => (v.trim().length >= 6 ? null : 'Min 6 characters'),
     },
   })
 
   const handleSubmit = form.onSubmit(async (values) => {
     try {
       await login(values.email, values.password, values.remember)
-      navigate('/tr')
+      navigate('/')
     } catch {
       notifications.show({
         color: 'red',
-        title: 'Giriş başarısız',
-        message: 'E-posta veya şifre hatalı. Lütfen bilgilerinizi kontrol edin.',
+        title: t('auth.loginFailed'),
+        message: t('auth.loginFailedMessage'),
       })
     }
   })
@@ -50,14 +52,15 @@ export function LoginPage() {
       </div>
 
       <header className={formClasses.header}>
-        <h1 className={formClasses.title}>Tekrar hoş geldiniz</h1>
-        <p className={formClasses.subtitle}>
-          Hesabınıza giriş yaparak kargo panelinize erişin.
-        </p>
+        <h1 className={formClasses.title}>{t('auth.welcome')}</h1>
+        <p className={formClasses.subtitle}>{t('auth.subtitle')}</p>
         {import.meta.env.DEV && isPostgrest && (
           <Text size="xs" c="dimmed" mt="sm">
-            Yerel veritabanı: <strong>demo@navlun.local</strong> veya{' '}
-            <strong>demo@stocado.local</strong> — şifre <strong>Demo123!</strong>
+            {t('auth.localHint', {
+              email1: 'demo@navlun.local',
+              email2: 'demo@stocado.local',
+              password: 'Demo123!',
+            })}
           </Text>
         )}
       </header>
@@ -68,27 +71,27 @@ export function LoginPage() {
             <TextInput
               autoFocus
               type="email"
-              label="E-posta"
-              placeholder="ornek@firma.com"
+              label={t('auth.email')}
+              placeholder={t('auth.emailPlaceholder')}
               required
               leftSection={<IconMail size={18} stroke={1.5} />}
               {...form.getInputProps('email')}
             />
             <PasswordInput
-              label="Şifre"
-              placeholder="Şifrenizi girin"
+              label={t('auth.password')}
+              placeholder={t('auth.passwordPlaceholder')}
               required
               leftSection={<IconLock size={18} stroke={1.5} />}
               {...form.getInputProps('password')}
             />
             <Group justify="space-between" align="center" wrap="nowrap" gap="xs">
               <Checkbox
-                label="Beni hatırla"
+                label={t('auth.remember')}
                 size="sm"
                 {...form.getInputProps('remember', { type: 'checkbox' })}
               />
-              <Anchor component={Link} to="/tr/auth/forgot-password" size="sm" fw={500}>
-                Şifremi unuttum
+              <Anchor component={Link} to="/auth/forgot-password" size="sm" fw={500}>
+                {t('auth.forgot')}
               </Anchor>
             </Group>
             <Button
@@ -98,16 +101,16 @@ export function LoginPage() {
               loading={form.submitting}
               className={`${formClasses.primaryButton} ${classes.submitButton}`}
             >
-              Giriş yap
+              {t('auth.login')}
             </Button>
           </Stack>
         </form>
       </Paper>
 
       <Text className={formClasses.footerHint}>
-        Henüz bir hesabınız yok mu?{' '}
-        <Anchor component={Link} to="/tr/auth/register" fw={600}>
-          Kayıt Ol
+        {t('auth.registerPrompt')}{' '}
+        <Anchor component={Link} to="/auth/register" fw={600}>
+          {t('auth.register')}
         </Anchor>
       </Text>
     </div>

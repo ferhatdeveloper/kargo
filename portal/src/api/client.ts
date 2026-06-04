@@ -27,7 +27,7 @@ api.interceptors.response.use(
       localStorage.removeItem('user')
       localStorage.removeItem('selected_account_id')
       if (!window.location.pathname.includes('/auth/')) {
-        window.location.href = '/tr/auth/login'
+        window.location.href = '/auth/login'
       }
     }
     return Promise.reject(error)

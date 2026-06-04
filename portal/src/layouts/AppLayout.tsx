@@ -13,13 +13,16 @@ import {
 import { IconChevronDown, IconLogout } from '@tabler/icons-react'
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { AppNavbar } from '@/components/AppNavbar'
+import { LocaleSwitcher } from '@/components/LocaleSwitcher'
 import { useAuth } from '@/context/AuthContext'
+import { useLocale } from '@/context/LocaleContext'
 
 export function AppLayout() {
   const [mobileOpened, setMobileOpened] = useState(false)
   const { user, accounts, selectedAccountId, setSelectedAccountId, logout, isLoading, isAuthenticated } =
     useAuth()
   const navigate = useNavigate()
+  const { t } = useLocale()
 
   if (isLoading) {
     return (
@@ -30,7 +33,7 @@ export function AppLayout() {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/tr/auth/login" replace />
+    return <Navigate to="/auth/login" replace />
   }
 
   const accountOptions = accounts.map((a) => ({
@@ -40,12 +43,12 @@ export function AppLayout() {
 
   const handleLogout = async () => {
     await logout()
-    navigate('/tr/auth/login')
+    navigate('/auth/login')
   }
 
   const dashboardPath = selectedAccountId
-    ? `/tr/accounts/${selectedAccountId}/dashboard`
-    : '/tr'
+    ? `/accounts/${selectedAccountId}/dashboard`
+    : '/'
 
   return (
     <AppShell
@@ -63,7 +66,7 @@ export function AppLayout() {
 
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between">
-          <Group>
+          <Group gap="sm">
             <Burger
               opened={mobileOpened}
               onClick={() => setMobileOpened((o) => !o)}
@@ -79,6 +82,7 @@ export function AppLayout() {
                 size="sm"
               />
             )}
+            <LocaleSwitcher />
           </Group>
           <Menu shadow="md" width={200}>
             <Menu.Target>
@@ -101,10 +105,10 @@ export function AppLayout() {
               </UnstyledButton>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item onClick={() => navigate(dashboardPath)}>Gösterge Panelim</Menu.Item>
+              <Menu.Item onClick={() => navigate(dashboardPath)}>{t('app.myDashboard')}</Menu.Item>
               <Menu.Divider />
               <Menu.Item color="red" leftSection={<IconLogout size={14} />} onClick={handleLogout}>
-                Çıkış Yap
+                {t('app.logout')}
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>

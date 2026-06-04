@@ -8,15 +8,16 @@ import { DashboardPage } from '@/pages/dashboard/DashboardPage'
 import { CargosPage } from '@/pages/cargos/CargosPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { useAuth } from '@/context/AuthContext'
+import { LegacyLocaleRedirect } from './LegacyLocaleRedirect'
 
 function HomeRedirect() {
   const { selectedAccountId, isAuthenticated, isLoading } = useAuth()
   if (isLoading) return null
-  if (!isAuthenticated) return <Navigate to="/tr/auth/login" replace />
+  if (!isAuthenticated) return <Navigate to="/auth/login" replace />
   if (selectedAccountId) {
-    return <Navigate to={`/tr/accounts/${selectedAccountId}/dashboard`} replace />
+    return <Navigate to={`/accounts/${selectedAccountId}/dashboard`} replace />
   }
-  return <Navigate to="/tr/auth/login" replace />
+  return <Navigate to="/auth/login" replace />
 }
 
 function accountRoutes() {
@@ -62,20 +63,20 @@ function accountRoutes() {
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/tr" replace />} />
-      <Route path="/tr" element={<HomeRedirect />} />
+      <Route path="/" element={<HomeRedirect />} />
 
-      <Route path="/tr/auth" element={<AuthLayout />}>
+      <Route path="/auth" element={<AuthLayout />}>
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 
-      <Route path="/tr" element={<AppLayout />}>
+      <Route element={<AppLayout />}>
         <Route path="accounts/:accountId">{accountRoutes()}</Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/tr" replace />} />
+      <Route path="/tr/*" element={<LegacyLocaleRedirect />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }
