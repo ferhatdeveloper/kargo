@@ -1,16 +1,18 @@
 import {
   Anchor,
   Button,
+  Grid,
   Paper,
   PasswordInput,
   Stack,
   Text,
   TextInput,
-  Title,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { Link } from 'react-router-dom'
+import { Logo } from '@/components/Logo'
+import formClasses from './authForm.module.css'
 
 export function RegisterPage() {
   const form = useForm({
@@ -40,32 +42,54 @@ export function RegisterPage() {
   })
 
   return (
-    <Stack gap={0} align="center">
-      <Title ta="center">Hesap oluşturun</Title>
-      <Text c="dimmed" size="sm" ta="center" mt={5}>
+    <div className={formClasses.wrapper} style={{ maxWidth: '28rem' }}>
+      <div className={formClasses.mobileLogo}>
+        <Logo h={40} />
+      </div>
+
+      <header className={formClasses.header}>
+        <h1 className={formClasses.title}>Hesap oluşturun</h1>
+        <p className={formClasses.subtitle}>Stocado ile kargo yönetimine hemen başlayın.</p>
+      </header>
+
+      <Paper className={formClasses.card} radius="lg">
+        <form onSubmit={handleSubmit}>
+          <Stack gap="md">
+            <Grid>
+              <Grid.Col span={{ base: 12, sm: 6 }}>
+                <TextInput label="Ad" required {...form.getInputProps('first_name')} />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, sm: 6 }}>
+                <TextInput label="Soyad" required {...form.getInputProps('last_name')} />
+              </Grid.Col>
+            </Grid>
+            <TextInput label="E-posta" type="email" required {...form.getInputProps('email')} />
+            <TextInput label="Telefon" required {...form.getInputProps('phone')} />
+            <PasswordInput label="Şifre" required {...form.getInputProps('password')} />
+            <PasswordInput
+              label="Şifre Tekrar"
+              required
+              {...form.getInputProps('password_confirmation')}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              size="md"
+              loading={form.submitting}
+              className={formClasses.primaryButton}
+            >
+              Kayıt Ol
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+
+      <Text className={formClasses.footerHint}>
         Zaten hesabınız var mı?{' '}
-        <Anchor size="sm" component={Link} to="/tr/auth/login">
+        <Anchor component={Link} to="/tr/auth/login" fw={600}>
           Giriş yap
         </Anchor>
       </Text>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md" w={420} maw="95%">
-        <form onSubmit={handleSubmit}>
-          <TextInput label="Ad" required {...form.getInputProps('first_name')} />
-          <TextInput label="Soyad" required mt="md" {...form.getInputProps('last_name')} />
-          <TextInput label="E-posta" type="email" required mt="md" {...form.getInputProps('email')} />
-          <TextInput label="Telefon" required mt="md" {...form.getInputProps('phone')} />
-          <PasswordInput label="Şifre" required mt="md" {...form.getInputProps('password')} />
-          <PasswordInput
-            label="Şifre Tekrar"
-            required
-            mt="md"
-            {...form.getInputProps('password_confirmation')}
-          />
-          <Button type="submit" fullWidth mt="xl" loading={form.submitting}>
-            Kayıt Ol
-          </Button>
-        </form>
-      </Paper>
-    </Stack>
+    </div>
   )
 }
