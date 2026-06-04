@@ -20,7 +20,7 @@ npm run dev
 
 Giriş (yerel): `demo@navlun.local` / `Demo123!` (eski volume’da `demo@stocado.local` da çalışır)
 
-Uygulama `http://localhost:5173/tr/auth/login` adresinde açılır. API istekleri varsayılan olarak harici kargo API’sine Vite proxy ile yönlendirilir (`portal/vite.config.ts`).
+Uygulama `http://localhost:5173/auth/login` adresinde açılır. API istekleri varsayılan olarak harici kargo API’sine Vite proxy ile yönlendirilir (`portal/vite.config.ts`).
 
 ### Yerel veritabanı (PostgreSQL + PostgREST)
 
@@ -34,7 +34,7 @@ Ayrıntılar: [db/README.md](db/README.md)
 
 ## Özellikler
 
-- Türkçe arayüz (`/tr` rotaları)
+- Çoklu dil (TR/EN) — dil URL’de değil, `localStorage` + üst bardaki seçici
 - Giriş, kayıt ve şifremi unuttum
 - Müşteri paneli: gösterge paneli, kargolar, ürünler, faturalar, entegrasyonlar
 - Canlı veya yerel PostgREST API entegrasyonu

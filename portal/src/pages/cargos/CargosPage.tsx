@@ -67,7 +67,7 @@ export function CargosPage() {
         {selectedAccountId && (
           <Button
             component={Link}
-            to={`/tr/accounts/${selectedAccountId}/cargos/create`}
+            to={`/accounts/${selectedAccountId}/cargos/create`}
             leftSection={<IconPackageExport size={18} />}
           >
             Yeni Kargo

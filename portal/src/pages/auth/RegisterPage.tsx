@@ -12,9 +12,11 @@ import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { Link } from 'react-router-dom'
 import { Logo } from '@/components/Logo'
+import { useLocale } from '@/context/LocaleContext'
 import formClasses from './authForm.module.css'
 
 export function RegisterPage() {
+  const { t } = useLocale()
   const form = useForm({
     initialValues: {
       first_name: '',
@@ -25,17 +27,17 @@ export function RegisterPage() {
       password_confirmation: '',
     },
     validate: {
-      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'E-posta adresi geçerli değil'),
-      password: (v) => (v.length >= 6 ? null : 'Şifre en az 6 karakter olmalıdır'),
+      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'Invalid email'),
+      password: (v) => (v.length >= 6 ? null : 'Min 6 characters'),
       password_confirmation: (v, values) =>
-        v === values.password ? null : 'Şifreler eşleşmiyor',
+        v === values.password ? null : 'Passwords do not match',
     },
   })
 
   const handleSubmit = form.onSubmit(() => {
     notifications.show({
       color: 'blue',
-      title: 'Kayıt',
+      title: t('auth.register'),
       message:
         'Kayıt işlemi canlı API üzerinden yapılır. Yerel geliştirmede kayıt uç noktası yapılandırılmalıdır.',
     })
@@ -48,8 +50,8 @@ export function RegisterPage() {
       </div>
 
       <header className={formClasses.header}>
-        <h1 className={formClasses.title}>Hesap oluşturun</h1>
-        <p className={formClasses.subtitle}>Navlun ile kargo yönetimine hemen başlayın.</p>
+        <h1 className={formClasses.title}>{t('auth.registerTitle')}</h1>
+        <p className={formClasses.subtitle}>{t('auth.registerSubtitle')}</p>
       </header>
 
       <Paper className={formClasses.card} radius="lg">
@@ -63,9 +65,9 @@ export function RegisterPage() {
                 <TextInput label="Soyad" required {...form.getInputProps('last_name')} />
               </Grid.Col>
             </Grid>
-            <TextInput label="E-posta" type="email" required {...form.getInputProps('email')} />
+            <TextInput label={t('auth.email')} type="email" required {...form.getInputProps('email')} />
             <TextInput label="Telefon" required {...form.getInputProps('phone')} />
-            <PasswordInput label="Şifre" required {...form.getInputProps('password')} />
+            <PasswordInput label={t('auth.password')} required {...form.getInputProps('password')} />
             <PasswordInput
               label="Şifre Tekrar"
               required
@@ -78,16 +80,16 @@ export function RegisterPage() {
               loading={form.submitting}
               className={formClasses.primaryButton}
             >
-              Kayıt Ol
+              {t('auth.register')}
             </Button>
           </Stack>
         </form>
       </Paper>
 
       <Text className={formClasses.footerHint}>
-        Zaten hesabınız var mı?{' '}
-        <Anchor component={Link} to="/tr/auth/login" fw={600}>
-          Giriş yap
+        {t('auth.hasAccount')}{' '}
+        <Anchor component={Link} to="/auth/login" fw={600}>
+          {t('auth.login')}
         </Anchor>
       </Text>
     </div>

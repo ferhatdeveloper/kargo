@@ -20,7 +20,7 @@
 All commands run inside `portal/` — see root `README.md`.
 
 - **Install:** `npm ci`
-- **Dev:** `npm run dev` → http://localhost:5173/tr/auth/login
+- **Dev:** `npm run dev` → http://localhost:5173/auth/login
 - **Lint:** `npm run lint`
 - **Build:** `npm run build`
 
@@ -38,7 +38,7 @@ All commands run inside `portal/` — see root `README.md`.
 ### Hello-world / smoke test
 
 1. `cd portal && npm run dev`
-2. `/tr/auth/login` — Navlun markası ve giriş formu
+2. `/auth/login` — Navlun markası; dil TR/EN seçici ile değişir
 3. Yerel DB: `make db-up` + `POST /rpc/auth_login`
 
 ### tmux
