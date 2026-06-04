@@ -15,7 +15,7 @@ const queryClient = new QueryClient({
   },
 })
 
-const colorSchemeManager = localStorageColorSchemeManager({ key: 'stocado-color-scheme' })
+const colorSchemeManager = localStorageColorSchemeManager({ key: 'navlun-color-scheme' })
 
 export default function App() {
   return (

@@ -50,7 +50,7 @@ STABLE
 AS $$
   SELECT coalesce(
     nullif(current_setting('app.jwt_secret', true), ''),
-    'kargo-dev-jwt-secret-min-32-chars!!'
+    'navlun-dev-jwt-secret-min-32-chars!!'
   );
 $$;
 
@@ -294,4 +294,12 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO authentic
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO anon;
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO authenticated;
 
-ALTER DATABASE kargo SET app.jwt_secret TO 'kargo-dev-jwt-secret-min-32-chars!!';
+-- DB adı init sırasında POSTGRES_DB ile oluşur (navlun)
+DO $$
+BEGIN
+  EXECUTE format(
+    'ALTER DATABASE %I SET app.jwt_secret TO %L',
+    current_database(),
+    'navlun-dev-jwt-secret-min-32-chars!!'
+  );
+END $$;

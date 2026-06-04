@@ -37,8 +37,8 @@ export function AuthLayout() {
           <Logo h={44} w="auto" className={classes.brandLogo} />
           <h1 className={classes.brandTitle}>Kargo yönetiminiz tek yerde</h1>
           <p className={classes.brandLead}>
-            Stocado müşteri paneli ile gönderilerinizi, entegrasyonlarınızı ve finansal işlemlerinizi
-            güvenle yönetin.
+            Navlun ile gönderilerinizi, entegrasyonlarınızı ve finansal işlemlerinizi güvenle
+            yönetin.
           </p>
           <ul className={classes.features}>
             {features.map(({ icon: Icon, title, description }) => (

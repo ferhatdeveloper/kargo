@@ -14,10 +14,10 @@ VALUES
   ('kurumsal', 'Kurumsal Liste', 'Yüksek hacim indirimleri', TRUE)
 ON CONFLICT (code) DO NOTHING;
 
--- Demo kullanıcı: demo@stocado.local / Demo123!
+-- Demo kullanıcı: demo@navlun.local / Demo123!
 INSERT INTO users (email, password_hash, first_name, last_name, phone, user_type, status)
 VALUES (
-  'demo@stocado.local',
+  'demo@navlun.local',
   crypt('Demo123!', gen_salt('bf')),
   'Demo',
   'Kullanıcı',
@@ -45,7 +45,7 @@ ON CONFLICT (account_code) DO NOTHING;
 INSERT INTO account_members (account_id, user_id, role, is_default)
 SELECT a.id, u.id, 'owner', TRUE
 FROM accounts a, users u
-WHERE a.account_code = 'DEMO001' AND u.email = 'demo@stocado.local'
+WHERE a.account_code = 'DEMO001' AND u.email = 'demo@navlun.local'
 ON CONFLICT (account_id, user_id) DO NOTHING;
 
 INSERT INTO account_settings (account_id)
@@ -88,7 +88,7 @@ FROM accounts a
 CROSS JOIN users u
 CROSS JOIN generate_series(1, 12) g
 LEFT JOIN cargo_companies cc ON cc.code = 'yurtici'
-WHERE a.account_code = 'DEMO001' AND u.email = 'demo@stocado.local'
+WHERE a.account_code = 'DEMO001' AND u.email = 'demo@navlun.local'
 ON CONFLICT (account_id, tracking_number) DO NOTHING;
 
 INSERT INTO products (account_id, sku, title, unit_price, stock_quantity)
@@ -109,4 +109,4 @@ ON CONFLICT (account_id, provider_code) DO NOTHING;
 INSERT INTO support_tickets (account_id, created_by, subject, status, priority)
 SELECT a.id, u.id, 'Demo destek talebi', 'open', 'normal'
 FROM accounts a, users u
-WHERE a.account_code = 'DEMO001' AND u.email = 'demo@stocado.local';
+WHERE a.account_code = 'DEMO001' AND u.email = 'demo@navlun.local';
