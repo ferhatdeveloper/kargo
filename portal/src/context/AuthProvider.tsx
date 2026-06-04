@@ -74,12 +74,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (remember) localStorage.setItem(AUTH_STORAGE_KEYS.remember, '1')
       setAccessToken(res.token)
       setUser(res.user)
-      const accRes = await getUserAccounts(res.user.id)
-      setAccounts(accRes.items)
-      if (accRes.items[0]) setSelectedAccountId(accRes.items[0].id)
+
+      let accountId: string | null = null
+      try {
+        const accRes = await getUserAccounts(res.user.id)
+        setAccounts(accRes.items)
+        accountId = accRes.items[0]?.id ?? null
+        if (accountId) {
+          setSelectedAccountIdState(accountId)
+          localStorage.setItem(AUTH_STORAGE_KEYS.account, accountId)
+        }
+      } catch {
+        setAccounts([])
+      }
       setIsLoading(false)
+      return accountId
     },
-    [setSelectedAccountId],
+    [],
   )
 
   const logout = useCallback(async () => {

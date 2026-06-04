@@ -11,11 +11,13 @@ import { useAuth } from '@/hooks/useAuth'
 import { LegacyLocaleRedirect } from './LegacyLocaleRedirect'
 
 function HomeRedirect() {
-  const { selectedAccountId, isAuthenticated, isLoading } = useAuth()
+  const { selectedAccountId, accounts, isAuthenticated, isLoading } = useAuth()
   if (isLoading) return null
   if (!isAuthenticated) return <Navigate to="/auth/login" replace />
-  if (selectedAccountId) {
-    return <Navigate to={`/accounts/${selectedAccountId}/dashboard`} replace />
+
+  const accountId = selectedAccountId ?? accounts[0]?.id ?? null
+  if (accountId) {
+    return <Navigate to={`/accounts/${accountId}/dashboard`} replace />
   }
   return <Navigate to="/auth/login" replace />
 }

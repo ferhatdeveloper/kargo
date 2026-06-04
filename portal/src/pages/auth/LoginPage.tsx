@@ -14,6 +14,7 @@ import { notifications } from '@mantine/notifications'
 import { IconLock, IconMail } from '@tabler/icons-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { isPostgrest } from '@/api/config'
+import { getApiErrorMessage } from '@/api/errors'
 import { Logo } from '@/components/Logo'
 import { useAuth } from '@/hooks/useAuth'
 import { useLocale } from '@/hooks/useLocale'
@@ -34,13 +35,17 @@ export function LoginPage() {
 
   const handleSubmit = form.onSubmit(async (values) => {
     try {
-      await login(values.email, values.password, values.remember)
-      navigate('/')
-    } catch {
+      const accountId = await login(values.email, values.password, values.remember)
+      if (accountId) {
+        navigate(`/accounts/${accountId}/dashboard`, { replace: true })
+      } else {
+        navigate('/', { replace: true })
+      }
+    } catch (error) {
       notifications.show({
         color: 'red',
         title: t('auth.loginFailed'),
-        message: t('auth.loginFailedMessage'),
+        message: getApiErrorMessage(error, t('auth.loginFailedMessage')),
       })
     }
   })

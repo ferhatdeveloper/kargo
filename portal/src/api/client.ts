@@ -26,7 +26,8 @@ api.interceptors.response.use(
       localStorage.removeItem('access_token')
       localStorage.removeItem('user')
       localStorage.removeItem('selected_account_id')
-      if (!window.location.pathname.includes('/auth/')) {
+      const onAuthPage = window.location.pathname.startsWith('/auth')
+      if (!onAuthPage) {
         window.location.href = '/auth/login'
       }
     }

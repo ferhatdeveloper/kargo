@@ -7,7 +7,7 @@ export interface AuthContextValue {
   selectedAccountId: string | null
   isLoading: boolean
   isAuthenticated: boolean
-  login: (email: string, password: string, remember: boolean) => Promise<void>
+  login: (email: string, password: string, remember: boolean) => Promise<string | null>
   logout: () => Promise<void>
   setSelectedAccountId: (id: string) => void
   refresh: () => Promise<void>
