@@ -17,8 +17,8 @@ import {
 import { Link, useLocation } from 'react-router-dom'
 import { Logo } from './Logo'
 import { getAccountMenu, type MenuItem } from '@/config/menu'
-import { useAuth } from '@/context/AuthContext'
-import { useLocale } from '@/context/LocaleContext'
+import { useAuth } from '@/hooks/useAuth'
+import { useLocale } from '@/hooks/useLocale'
 import classes from './AppNavbar.module.css'
 
 interface AppNavbarProps {

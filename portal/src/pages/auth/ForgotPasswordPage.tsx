@@ -3,7 +3,7 @@ import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { Link, useNavigate } from 'react-router-dom'
 import { forgotPassword } from '@/api/auth'
-import { useLocale } from '@/context/LocaleContext'
+import { useLocale } from '@/hooks/useLocale'
 import formClasses from './authForm.module.css'
 
 export function ForgotPasswordPage() {
@@ -12,7 +12,7 @@ export function ForgotPasswordPage() {
   const form = useForm({
     initialValues: { email: '' },
     validate: {
-      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'Invalid email'),
+      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : t('auth.emailInvalid')),
     },
   })
 

@@ -14,8 +14,8 @@ import { IconChevronDown, IconLogout } from '@tabler/icons-react'
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { AppNavbar } from '@/components/AppNavbar'
 import { LocaleSwitcher } from '@/components/LocaleSwitcher'
-import { useAuth } from '@/context/AuthContext'
-import { useLocale } from '@/context/LocaleContext'
+import { useAuth } from '@/hooks/useAuth'
+import { useLocale } from '@/hooks/useLocale'
 
 export function AppLayout() {
   const [mobileOpened, setMobileOpened] = useState(false)

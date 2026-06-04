@@ -21,3 +21,15 @@ db-seed:
 
 api-openapi:
 	@curl -s http://127.0.0.1:3000/ | head -20
+
+portal-lint:
+	cd portal && npm run lint
+
+portal-test:
+	cd portal && npm run test
+
+portal-smoke:
+	cd portal && npm run test:smoke
+
+portal-check: portal-lint portal-test portal-smoke
+	cd portal && npm run build

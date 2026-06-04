@@ -1,5 +1,6 @@
 import { api } from './client'
 import { isPostgrest } from './config'
+import { mapAccountRow } from './mapAccount'
 import type { LoginResponse, Paginated, Account, User } from '@/types'
 
 export async function login(data: {
@@ -67,7 +68,7 @@ export async function getAccount(accountId: string) {
     })
     const row = res.data[0]
     if (!row) throw new Error('Hesap bulunamadı')
-    return row
+    return mapAccountRow(row as unknown as Record<string, unknown>)
   }
   const res = await api.get<Account>(`/accounts/${accountId}`)
   return res.data

@@ -6,8 +6,8 @@ import { Notifications } from '@mantine/notifications'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 import { theme } from './theme'
-import { AuthProvider } from './context/AuthContext'
-import { LocaleProvider } from './context/LocaleContext'
+import { AuthProvider } from './context/AuthProvider'
+import { LocaleProvider } from './context/LocaleProvider'
 import { AppRoutes } from './routes'
 
 const queryClient = new QueryClient({

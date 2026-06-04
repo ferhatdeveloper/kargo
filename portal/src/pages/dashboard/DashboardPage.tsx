@@ -5,7 +5,7 @@ import {
   IconTruckDelivery,
   IconTrendingUp,
 } from '@tabler/icons-react'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 
 const statCards = [
   { label: 'Toplam Kargo', value: '—', icon: IconPackage, color: 'blue' },

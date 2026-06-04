@@ -1,12 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import dayjs from 'dayjs'
 import 'dayjs/locale/tr'
 import 'dayjs/locale/en'
@@ -17,14 +9,7 @@ import {
   type Locale,
   type MessageKey,
 } from '@/i18n/messages'
-
-interface LocaleContextValue {
-  locale: Locale
-  setLocale: (locale: Locale) => void
-  t: (key: MessageKey, params?: Record<string, string>) => string
-}
-
-const LocaleContext = createContext<LocaleContextValue | null>(null)
+import { LocaleContext, type LocaleContextValue } from './locale-context'
 
 function readStoredLocale(): Locale {
   const raw = localStorage.getItem(localeStorageKey)
@@ -60,13 +45,10 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     [locale],
   )
 
-  const value = useMemo(() => ({ locale, setLocale, t }), [locale, setLocale, t])
+  const value = useMemo<LocaleContextValue>(
+    () => ({ locale, setLocale, t }),
+    [locale, setLocale, t],
+  )
 
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>
-}
-
-export function useLocale() {
-  const ctx = useContext(LocaleContext)
-  if (!ctx) throw new Error('useLocale must be used within LocaleProvider')
-  return ctx
 }

@@ -1,65 +1,42 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { getMe, getUserAccounts, login as apiLogin, logout as apiLogout } from '@/api/auth'
-import type { Account, User } from '@/types'
-
-interface AuthContextValue {
-  user: User | null
-  accounts: Account[]
-  selectedAccountId: string | null
-  isLoading: boolean
-  isAuthenticated: boolean
-  login: (email: string, password: string, remember: boolean) => Promise<void>
-  logout: () => Promise<void>
-  setSelectedAccountId: (id: string) => void
-  refresh: () => Promise<void>
-}
-
-const AuthContext = createContext<AuthContextValue | null>(null)
-
-const STORAGE_KEYS = {
-  token: 'access_token',
-  user: 'user',
-  account: 'selected_account_id',
-  remember: 'remember_me',
-} as const
+import type { User } from '@/types'
+import { AUTH_STORAGE_KEYS, AuthContext, type AuthContextValue } from './auth-context'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => {
-    const raw = localStorage.getItem(STORAGE_KEYS.user)
+    const raw = localStorage.getItem(AUTH_STORAGE_KEYS.user)
     return raw ? (JSON.parse(raw) as User) : null
   })
-  const [accounts, setAccounts] = useState<Account[]>([])
-  const [selectedAccountId, setSelectedAccountIdState] = useState<string | null>(
-    () => localStorage.getItem(STORAGE_KEYS.account),
+  const [accessToken, setAccessToken] = useState<string | null>(() =>
+    localStorage.getItem(AUTH_STORAGE_KEYS.token),
   )
-  const [isLoading, setIsLoading] = useState(!!localStorage.getItem(STORAGE_KEYS.token))
+  const [accounts, setAccounts] = useState<AuthContextValue['accounts']>([])
+  const [selectedAccountId, setSelectedAccountIdState] = useState<string | null>(() =>
+    localStorage.getItem(AUTH_STORAGE_KEYS.account),
+  )
+  const [isLoading, setIsLoading] = useState(() => !!localStorage.getItem(AUTH_STORAGE_KEYS.token))
 
   const setSelectedAccountId = useCallback((id: string) => {
     setSelectedAccountIdState(id)
-    localStorage.setItem(STORAGE_KEYS.account, id)
+    localStorage.setItem(AUTH_STORAGE_KEYS.account, id)
   }, [])
 
   const loadSession = useCallback(async () => {
-    const token = localStorage.getItem(STORAGE_KEYS.token)
+    const token = localStorage.getItem(AUTH_STORAGE_KEYS.token)
     if (!token) {
+      setAccessToken(null)
       setIsLoading(false)
       return
     }
+    setAccessToken(token)
     try {
       const me = await getMe()
       setUser(me)
-      localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(me))
+      localStorage.setItem(AUTH_STORAGE_KEYS.user, JSON.stringify(me))
       const accRes = await getUserAccounts(me.id)
       setAccounts(accRes.items)
-      const stored = localStorage.getItem(STORAGE_KEYS.account)
+      const stored = localStorage.getItem(AUTH_STORAGE_KEYS.account)
       const valid = accRes.items.find((a) => a.id === stored)
       if (valid) {
         setSelectedAccountIdState(valid.id)
@@ -67,8 +44,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSelectedAccountId(accRes.items[0].id)
       }
     } catch {
-      localStorage.removeItem(STORAGE_KEYS.token)
-      localStorage.removeItem(STORAGE_KEYS.user)
+      localStorage.removeItem(AUTH_STORAGE_KEYS.token)
+      localStorage.removeItem(AUTH_STORAGE_KEYS.user)
+      setAccessToken(null)
       setUser(null)
       setAccounts([])
     } finally {
@@ -77,19 +55,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [setSelectedAccountId])
 
   useEffect(() => {
-    void loadSession()
+    let cancelled = false
+    ;(async () => {
+      await Promise.resolve()
+      if (cancelled) return
+      await loadSession()
+    })()
+    return () => {
+      cancelled = true
+    }
   }, [loadSession])
 
   const login = useCallback(
     async (email: string, password: string, remember: boolean) => {
       const res = await apiLogin({ email, password, remember })
-      localStorage.setItem(STORAGE_KEYS.token, res.token)
-      localStorage.setItem(STORAGE_KEYS.user, JSON.stringify(res.user))
-      if (remember) localStorage.setItem(STORAGE_KEYS.remember, '1')
+      localStorage.setItem(AUTH_STORAGE_KEYS.token, res.token)
+      localStorage.setItem(AUTH_STORAGE_KEYS.user, JSON.stringify(res.user))
+      if (remember) localStorage.setItem(AUTH_STORAGE_KEYS.remember, '1')
+      setAccessToken(res.token)
       setUser(res.user)
       const accRes = await getUserAccounts(res.user.id)
       setAccounts(accRes.items)
       if (accRes.items[0]) setSelectedAccountId(accRes.items[0].id)
+      setIsLoading(false)
     },
     [setSelectedAccountId],
   )
@@ -100,9 +88,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore */
     }
-    localStorage.removeItem(STORAGE_KEYS.token)
-    localStorage.removeItem(STORAGE_KEYS.user)
-    localStorage.removeItem(STORAGE_KEYS.account)
+    localStorage.removeItem(AUTH_STORAGE_KEYS.token)
+    localStorage.removeItem(AUTH_STORAGE_KEYS.user)
+    localStorage.removeItem(AUTH_STORAGE_KEYS.account)
+    setAccessToken(null)
     setUser(null)
     setAccounts([])
     setSelectedAccountIdState(null)
@@ -114,7 +103,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       accounts,
       selectedAccountId,
       isLoading,
-      isAuthenticated: !!user && !!localStorage.getItem(STORAGE_KEYS.token),
+      isAuthenticated: !!user && !!accessToken,
       login,
       logout,
       setSelectedAccountId,
@@ -125,6 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       accounts,
       selectedAccountId,
       isLoading,
+      accessToken,
       login,
       logout,
       setSelectedAccountId,
@@ -133,10 +123,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-export function useAuth() {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth must be used within AuthProvider')
-  return ctx
 }

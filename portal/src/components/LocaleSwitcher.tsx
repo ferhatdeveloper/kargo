@@ -1,5 +1,5 @@
 import { SegmentedControl } from '@mantine/core'
-import { useLocale } from '@/context/LocaleContext'
+import { useLocale } from '@/hooks/useLocale'
 import type { Locale } from '@/i18n/messages'
 
 export function LocaleSwitcher() {
