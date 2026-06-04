@@ -16,8 +16,9 @@ import {
 } from '@tabler/icons-react'
 import { Link, useLocation } from 'react-router-dom'
 import { Logo } from './Logo'
-import { getAccountMenu } from '@/config/menu'
-import { useAuth } from '@/context/AuthContext'
+import { getAccountMenu, type MenuItem } from '@/config/menu'
+import { useAuth } from '@/hooks/useAuth'
+import { useLocale } from '@/hooks/useLocale'
 import classes from './AppNavbar.module.css'
 
 interface AppNavbarProps {
@@ -25,19 +26,15 @@ interface AppNavbarProps {
 }
 
 function MenuLink({
-  label,
+  labelKey,
   icon: Icon,
   color,
   path,
   children,
-}: {
-  label: string
-  icon: React.ComponentType<{ size?: number; stroke?: number }>
-  color: string
-  path: string
-  children?: { label: string; path: string }[]
-}) {
+}: MenuItem) {
+  const { t } = useLocale()
   const location = useLocation()
+  const label = t(labelKey)
   const active = location.pathname === path || location.pathname.startsWith(path + '/')
   const [opened, setOpened] = useState(active)
 
@@ -60,7 +57,7 @@ function MenuLink({
                 key={c.path}
                 component={Link}
                 to={c.path}
-                label={c.label}
+                label={t(c.labelKey)}
                 active={location.pathname === c.path}
               />
             ))}

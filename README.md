@@ -1,27 +1,54 @@
-# Kargo Portal
+# Navlun
 
-Stocado müşteri portalına (`https://portal.stocado.com/tr`) benzer bir kargo yönetim paneli.
+B2B **kargo ve lojistik müşteri paneli** — gönderi, entegrasyon, finans ve raporlama tek arayüzde.
 
 ## Proje yapısı
 
 - `portal/` — React + Vite + Mantine UI frontend
+- `db/` — PostgreSQL şeması (migrations + seed)
+- `docker-compose.yml` — PostgreSQL 16 + PostgREST 12
 
 ## Geliştirme
 
 ```bash
+cp portal/.env.example portal/.env   # yerel PostgREST
+docker compose up -d                 # DB + API :3000
 cd portal
 npm install
 npm run dev
 ```
 
-Uygulama `http://localhost:5173/tr/auth/login` adresinde açılır. API istekleri varsayılan olarak `https://api.kargopaneli.com/v1` adresine Vite proxy ile yönlendirilir.
+Giriş (yerel): `demo@navlun.local` / `Demo123!` (eski volume’da `demo@stocado.local` da çalışır)
+
+Uygulama `http://localhost:5173/auth/login` adresinde açılır. Tüm API istekleri Vite proxy ile **PostgREST**’e gider (`/api` → `http://127.0.0.1:3000`, bkz. `portal/vite.config.ts`).
+
+### Yerel veritabanı (PostgreSQL + PostgREST)
+
+```bash
+make db-up          # veya: docker compose up -d
+# PostgREST: http://127.0.0.1:3000
+# Demo: demo@navlun.local / Demo123!
+```
+
+Ayrıntılar: [db/README.md](db/README.md)
+
+### Testler
+
+```bash
+make portal-check    # lint + unit + API smoke + build
+cd portal && npm run test:smoke
+```
 
 ## Özellikler
 
-- Türkçe arayüz (`/tr` rotaları)
-- Giriş, kayıt ve şifremi unuttum sayfaları (Stocado ile aynı metinler)
-- Müşteri paneli: gösterge paneli, kargolar, ürünler, faturalar, entegrasyonlar ve diğer menü öğeleri
-- Canlı API entegrasyonu (oturum token’ı ile)
+- Çoklu dil (TR/EN) — dil URL’de değil, `localStorage` + üst bardaki seçici
+- Giriş, kayıt ve şifremi unuttum
+- Müşteri paneli: gösterge paneli, kargolar, ürünler, faturalar, entegrasyonlar
+- **PostgREST** RPC API (auth, kargolar, fiyat teklifi, kargo oluşturma, etiket ayarları)
+
+## Marka
+
+Ürün adı **Navlun** (lojistik/navlun teriminden). Rakip marka adları UI veya repoda kullanılmaz.
 
 ## Güvenlik
 

@@ -1,0 +1,52 @@
+# Navlun — PostgreSQL + PostgREST
+
+Navlun müşteri paneli için tam veritabanı şeması. Tablolar `public` şemasında; API katmanı **PostgREST** ile sunulur.
+
+## Hızlı başlangıç
+
+```bash
+# Kök dizinden
+docker compose up -d
+docker compose ps
+```
+
+| Servis     | Port | Açıklama        |
+|-----------|------|-----------------|
+| PostgreSQL | 5432 | `navlun` / `navlun` |
+| PostgREST  | 3000 | REST + OpenAPI  |
+
+**Demo giriş:** `demo@navlun.local` / `Demo123!`
+
+```bash
+curl -s -X POST http://127.0.0.1:3000/rpc/auth_login \
+  -H 'Content-Type: application/json' \
+  -d '{"p_email":"demo@navlun.local","p_password":"Demo123!","p_remember":false}'
+```
+
+OpenAPI: http://127.0.0.1:3000/
+
+## Şema özeti
+
+Bkz. migration dosyaları `db/migrations/` — kullanıcı, hesap, kargo, ürün, finans, pazaryeri, destek modülleri.
+
+## PostgREST RPC (portal API eşlemesi)
+
+| Portal (mevcut) | PostgREST |
+|-----------------|-----------|
+| `POST /auth/login` | `POST /rpc/auth_login` |
+| `GET /auth/me` | `POST /rpc/auth_me` |
+| `POST /users/:id/accounts/query` | `POST /rpc/user_accounts_query` |
+| `POST /accounts/:id/cargos/query` | `POST /rpc/account_cargos_query` |
+| Kargo fiyat karşılaştırma | `POST /rpc/account_cargo_quote` |
+| Kargo oluşturma | `POST /rpc/account_cargo_create` |
+| Adres defteri | `POST /rpc/account_addresses_query` |
+| Etiket ayarları | `POST /rpc/account_label_settings_get` / `_save` |
+
+## Ortam değişkenleri
+
+| Değişken | Varsayılan |
+|----------|------------|
+| `PGRST_JWT_SECRET` | `navlun-dev-jwt-secret-min-32-chars!!` |
+| DB | `postgres://navlun:navlun@localhost:5432/navlun` |
+
+`app.jwt_secret` veritabanı ayarı `PGRST_JWT_SECRET` ile aynı olmalıdır.

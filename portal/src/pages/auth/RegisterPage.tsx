@@ -1,18 +1,22 @@
 import {
   Anchor,
   Button,
+  Grid,
   Paper,
   PasswordInput,
   Stack,
   Text,
   TextInput,
-  Title,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { Link } from 'react-router-dom'
+import { Logo } from '@/components/Logo'
+import { useLocale } from '@/hooks/useLocale'
+import formClasses from './authForm.module.css'
 
 export function RegisterPage() {
+  const { t } = useLocale()
   const form = useForm({
     initialValues: {
       first_name: '',
@@ -23,49 +27,71 @@ export function RegisterPage() {
       password_confirmation: '',
     },
     validate: {
-      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'E-posta adresi geçerli değil'),
-      password: (v) => (v.length >= 6 ? null : 'Şifre en az 6 karakter olmalıdır'),
+      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : t('auth.emailInvalid')),
+      password: (v) => (v.length >= 6 ? null : t('auth.passwordMin')),
       password_confirmation: (v, values) =>
-        v === values.password ? null : 'Şifreler eşleşmiyor',
+        v === values.password ? null : t('auth.passwordMismatch'),
     },
   })
 
   const handleSubmit = form.onSubmit(() => {
     notifications.show({
       color: 'blue',
-      title: 'Kayıt',
+      title: t('auth.register'),
       message:
-        'Kayıt işlemi canlı API üzerinden yapılır. Geliştirme ortamında portal.stocado.com kayıt akışını kullanın.',
+        'Kayıt işlemi canlı API üzerinden yapılır. Yerel geliştirmede kayıt uç noktası yapılandırılmalıdır.',
     })
   })
 
   return (
-    <Stack gap={0} align="center">
-      <Title ta="center">Hesap oluşturun</Title>
-      <Text c="dimmed" size="sm" ta="center" mt={5}>
-        Zaten hesabınız var mı?{' '}
-        <Anchor size="sm" component={Link} to="/tr/auth/login">
-          Giriş yap
-        </Anchor>
-      </Text>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md" w={420} maw="95%">
+    <div className={formClasses.wrapper} style={{ maxWidth: '28rem' }}>
+      <div className={formClasses.mobileLogo}>
+        <Logo h={40} />
+      </div>
+
+      <header className={formClasses.header}>
+        <h1 className={formClasses.title}>{t('auth.registerTitle')}</h1>
+        <p className={formClasses.subtitle}>{t('auth.registerSubtitle')}</p>
+      </header>
+
+      <Paper className={formClasses.card} radius="lg">
         <form onSubmit={handleSubmit}>
-          <TextInput label="Ad" required {...form.getInputProps('first_name')} />
-          <TextInput label="Soyad" required mt="md" {...form.getInputProps('last_name')} />
-          <TextInput label="E-posta" type="email" required mt="md" {...form.getInputProps('email')} />
-          <TextInput label="Telefon" required mt="md" {...form.getInputProps('phone')} />
-          <PasswordInput label="Şifre" required mt="md" {...form.getInputProps('password')} />
-          <PasswordInput
-            label="Şifre Tekrar"
-            required
-            mt="md"
-            {...form.getInputProps('password_confirmation')}
-          />
-          <Button type="submit" fullWidth mt="xl" loading={form.submitting}>
-            Kayıt Ol
-          </Button>
+          <Stack gap="md">
+            <Grid>
+              <Grid.Col span={{ base: 12, sm: 6 }}>
+                <TextInput label="Ad" required {...form.getInputProps('first_name')} />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, sm: 6 }}>
+                <TextInput label="Soyad" required {...form.getInputProps('last_name')} />
+              </Grid.Col>
+            </Grid>
+            <TextInput label={t('auth.email')} type="email" required {...form.getInputProps('email')} />
+            <TextInput label="Telefon" required {...form.getInputProps('phone')} />
+            <PasswordInput label={t('auth.password')} required {...form.getInputProps('password')} />
+            <PasswordInput
+              label="Şifre Tekrar"
+              required
+              {...form.getInputProps('password_confirmation')}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              size="md"
+              loading={form.submitting}
+              className={formClasses.primaryButton}
+            >
+              {t('auth.register')}
+            </Button>
+          </Stack>
         </form>
       </Paper>
-    </Stack>
+
+      <Text className={formClasses.footerHint}>
+        {t('auth.hasAccount')}{' '}
+        <Anchor component={Link} to="/auth/login" fw={600}>
+          {t('auth.login')}
+        </Anchor>
+      </Text>
+    </div>
   )
 }

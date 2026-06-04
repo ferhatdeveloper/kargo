@@ -6,17 +6,22 @@ import { RegisterPage } from '@/pages/auth/RegisterPage'
 import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage'
 import { DashboardPage } from '@/pages/dashboard/DashboardPage'
 import { CargosPage } from '@/pages/cargos/CargosPage'
+import { CreateCargoPage } from '@/pages/cargos/CreateCargoPage'
+import { PricingPlansPage } from '@/pages/pricing/PricingPlansPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
+import { LegacyLocaleRedirect } from './LegacyLocaleRedirect'
 
 function HomeRedirect() {
-  const { selectedAccountId, isAuthenticated, isLoading } = useAuth()
+  const { selectedAccountId, accounts, isAuthenticated, isLoading } = useAuth()
   if (isLoading) return null
-  if (!isAuthenticated) return <Navigate to="/tr/auth/login" replace />
-  if (selectedAccountId) {
-    return <Navigate to={`/tr/accounts/${selectedAccountId}/dashboard`} replace />
+  if (!isAuthenticated) return <Navigate to="/auth/login" replace />
+
+  const accountId = selectedAccountId ?? accounts[0]?.id ?? null
+  if (accountId) {
+    return <Navigate to={`/accounts/${accountId}/dashboard`} replace />
   }
-  return <Navigate to="/tr/auth/login" replace />
+  return <Navigate to="/auth/login" replace />
 }
 
 function accountRoutes() {
@@ -46,8 +51,14 @@ function accountRoutes() {
     if (path === 'dashboard') {
       return <Route key={path} path="dashboard" element={<DashboardPage />} />
     }
+    if (path === 'cargos/create') {
+      return <Route key={path} path="cargos/create" element={<CreateCargoPage />} />
+    }
     if (path === 'cargos') {
       return <Route key={path} path="cargos" element={<CargosPage />} />
+    }
+    if (path === 'pricing-plans') {
+      return <Route key={path} path="pricing-plans" element={<PricingPlansPage />} />
     }
     return (
       <Route
@@ -62,20 +73,20 @@ function accountRoutes() {
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/tr" replace />} />
-      <Route path="/tr" element={<HomeRedirect />} />
+      <Route path="/" element={<HomeRedirect />} />
 
-      <Route path="/tr/auth" element={<AuthLayout />}>
+      <Route path="/auth" element={<AuthLayout />}>
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 
-      <Route path="/tr" element={<AppLayout />}>
+      <Route element={<AppLayout />}>
         <Route path="accounts/:accountId">{accountRoutes()}</Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/tr" replace />} />
+      <Route path="/tr/*" element={<LegacyLocaleRedirect />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }
