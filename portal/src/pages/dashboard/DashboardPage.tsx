@@ -53,8 +53,8 @@ export function DashboardPage() {
             Gönderi ve Kargo Analiz Özeti
           </Title>
           <Text c="dimmed" size="sm">
-            Stocado portalındaki şehir haritası, kargo firması dağılımı ve durum grafikleri bu alanda
-            gösterilir. API bağlantısı ile canlı veri çekilebilir.
+            Şehir haritası, kargo firması dağılımı ve durum grafikleri bu alanda gösterilir. API
+            bağlantısı ile canlı veri çekilebilir.
           </Text>
         </Card>
         <Card withBorder padding="lg" radius="md">

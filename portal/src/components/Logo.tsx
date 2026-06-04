@@ -9,5 +9,5 @@ interface LogoProps {
 export function Logo({ h = 50, w = 'auto', className }: LogoProps) {
   const { colorScheme } = useMantineColorScheme()
   const src = colorScheme === 'dark' ? '/logo-dark.svg' : '/logo-light.svg'
-  return <Image src={src} alt="Stocado" h={h} w={w} fit="contain" className={className} />
+  return <Image src={src} alt="Navlun" h={h} w={w} fit="contain" className={className} />
 }

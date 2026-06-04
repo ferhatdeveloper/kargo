@@ -1,10 +1,12 @@
-# Kargo Portal
+# Navlun
 
-Stocado müşteri portalına (`https://portal.stocado.com/tr`) benzer bir kargo yönetim paneli.
+B2B **kargo ve lojistik müşteri paneli** — gönderi, entegrasyon, finans ve raporlama tek arayüzde.
 
 ## Proje yapısı
 
 - `portal/` — React + Vite + Mantine UI frontend
+- `db/` — PostgreSQL şeması (migrations + seed)
+- `docker-compose.yml` — PostgreSQL 16 + PostgREST 12
 
 ## Geliştirme
 
@@ -14,14 +16,14 @@ npm install
 npm run dev
 ```
 
-Uygulama `http://localhost:5173/tr/auth/login` adresinde açılır. API istekleri varsayılan olarak `https://api.kargopaneli.com/v1` adresine Vite proxy ile yönlendirilir.
+Uygulama `http://localhost:5173/tr/auth/login` adresinde açılır. API istekleri varsayılan olarak harici kargo API’sine Vite proxy ile yönlendirilir (`portal/vite.config.ts`).
 
 ### Yerel veritabanı (PostgreSQL + PostgREST)
 
 ```bash
 make db-up          # veya: docker compose up -d
 # PostgREST: http://127.0.0.1:3000
-# Demo: demo@stocado.local / Demo123!
+# Demo: demo@navlun.local / Demo123!
 ```
 
 Ayrıntılar: [db/README.md](db/README.md)
@@ -29,9 +31,13 @@ Ayrıntılar: [db/README.md](db/README.md)
 ## Özellikler
 
 - Türkçe arayüz (`/tr` rotaları)
-- Giriş, kayıt ve şifremi unuttum sayfaları (Stocado ile aynı metinler)
-- Müşteri paneli: gösterge paneli, kargolar, ürünler, faturalar, entegrasyonlar ve diğer menü öğeleri
-- Canlı API entegrasyonu (oturum token’ı ile)
+- Giriş, kayıt ve şifremi unuttum
+- Müşteri paneli: gösterge paneli, kargolar, ürünler, faturalar, entegrasyonlar
+- Canlı veya yerel PostgREST API entegrasyonu
+
+## Marka
+
+Ürün adı **Navlun** (lojistik/navlun teriminden). Rakip marka adları UI veya repoda kullanılmaz.
 
 ## Güvenlik
 

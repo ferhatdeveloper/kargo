@@ -1,10 +1,10 @@
 import { createTheme } from '@mantine/core'
 
-/** Stocado marka: lacivert #203D75, kırmızı #C42126 */
+/** Navlun marka: lacivert #203D75, kırmızı #C42126 */
 export const theme = createTheme({
-  primaryColor: 'stocado',
+  primaryColor: 'navlun',
   colors: {
-    stocado: [
+    navlun: [
       '#e8edf5',
       '#c5d0e6',
       '#9fb3d6',

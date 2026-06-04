@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-echo "Running Kargo DB migrations..."
+echo "Running Navlun DB migrations..."
 
 for f in /migrations/*.sql; do
   echo "  -> $(basename "$f")"

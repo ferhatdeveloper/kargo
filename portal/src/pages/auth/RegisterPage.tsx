@@ -37,7 +37,7 @@ export function RegisterPage() {
       color: 'blue',
       title: 'Kayıt',
       message:
-        'Kayıt işlemi canlı API üzerinden yapılır. Geliştirme ortamında portal.stocado.com kayıt akışını kullanın.',
+        'Kayıt işlemi canlı API üzerinden yapılır. Yerel geliştirmede kayıt uç noktası yapılandırılmalıdır.',
     })
   })
 
@@ -49,7 +49,7 @@ export function RegisterPage() {
 
       <header className={formClasses.header}>
         <h1 className={formClasses.title}>Hesap oluşturun</h1>
-        <p className={formClasses.subtitle}>Stocado ile kargo yönetimine hemen başlayın.</p>
+        <p className={formClasses.subtitle}>Navlun ile kargo yönetimine hemen başlayın.</p>
       </header>
 
       <Paper className={formClasses.card} radius="lg">
