@@ -6,6 +6,8 @@ import { RegisterPage } from '@/pages/auth/RegisterPage'
 import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage'
 import { DashboardPage } from '@/pages/dashboard/DashboardPage'
 import { CargosPage } from '@/pages/cargos/CargosPage'
+import { CreateCargoPage } from '@/pages/cargos/CreateCargoPage'
+import { PricingPlansPage } from '@/pages/pricing/PricingPlansPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { useAuth } from '@/hooks/useAuth'
 import { LegacyLocaleRedirect } from './LegacyLocaleRedirect'
@@ -49,8 +51,14 @@ function accountRoutes() {
     if (path === 'dashboard') {
       return <Route key={path} path="dashboard" element={<DashboardPage />} />
     }
+    if (path === 'cargos/create') {
+      return <Route key={path} path="cargos/create" element={<CreateCargoPage />} />
+    }
     if (path === 'cargos') {
       return <Route key={path} path="cargos" element={<CargosPage />} />
+    }
+    if (path === 'pricing-plans') {
+      return <Route key={path} path="pricing-plans" element={<PricingPlansPage />} />
     }
     return (
       <Route

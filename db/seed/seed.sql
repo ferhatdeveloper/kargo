@@ -1,18 +1,87 @@
 -- Demo veri (geliştirme)
 
-INSERT INTO cargo_companies (code, title, supports_domestic, supports_abroad, supports_pod)
+INSERT INTO cargo_companies (code, title, supports_domestic, supports_abroad, supports_pod, config)
 VALUES
-  ('yurtici', 'Yurtiçi Kargo', TRUE, FALSE, TRUE),
-  ('aras', 'Aras Kargo', TRUE, FALSE, TRUE),
-  ('mng', 'MNG Kargo', TRUE, FALSE, TRUE),
-  ('ptt', 'PTT Kargo', TRUE, FALSE, FALSE)
-ON CONFLICT (code) DO NOTHING;
+  (
+    'yurtici',
+    'Yurtiçi Kargo',
+    TRUE,
+    FALSE,
+    TRUE,
+    '{"quote":{"estimated_days":"1-2","tiers":[{"up_to_desi":3,"price":137},{"up_to_desi":10,"price":151},{"up_to_desi":30,"price":235}],"overflow_base_desi":30,"overflow_base_price":235,"extra_per_desi":23.34,"pod_fee":12}}'::jsonb
+  ),
+  (
+    'aras',
+    'Aras Kargo',
+    TRUE,
+    FALSE,
+    TRUE,
+    '{"quote":{"estimated_days":"1-3","tiers":[{"up_to_desi":3,"price":142},{"up_to_desi":10,"price":158},{"up_to_desi":30,"price":248}],"overflow_base_desi":30,"overflow_base_price":248,"extra_per_desi":24.5,"pod_fee":14}}'::jsonb
+  ),
+  (
+    'mng',
+    'MNG Kargo',
+    TRUE,
+    FALSE,
+    TRUE,
+    '{"quote":{"estimated_days":"2-3","tiers":[{"up_to_desi":3,"price":135},{"up_to_desi":10,"price":149},{"up_to_desi":30,"price":232}],"overflow_base_desi":30,"overflow_base_price":232,"extra_per_desi":22.9,"pod_fee":11}}'::jsonb
+  ),
+  (
+    'ptt',
+    'PTT Kargo',
+    TRUE,
+    FALSE,
+    FALSE,
+    '{"quote":{"estimated_days":"2-4","tiers":[{"up_to_desi":3,"price":128},{"up_to_desi":10,"price":145},{"up_to_desi":30,"price":220}],"overflow_base_desi":30,"overflow_base_price":220,"extra_per_desi":21.5,"pod_fee":0}}'::jsonb
+  ),
+  (
+    'hepsijet',
+    'hepsiJET',
+    TRUE,
+    FALSE,
+    TRUE,
+    '{"quote":{"estimated_days":"1-2","tiers":[{"up_to_desi":3,"price":132},{"up_to_desi":10,"price":151},{"up_to_desi":30,"price":246}],"overflow_base_desi":30,"overflow_base_price":246,"extra_per_desi":23.34,"pod_fee":10}}'::jsonb
+  ),
+  (
+    'surat',
+    'Sürat Kargo',
+    TRUE,
+    FALSE,
+    TRUE,
+    '{"quote":{"estimated_days":"1-2","tiers":[{"up_to_desi":3,"price":140},{"up_to_desi":10,"price":155},{"up_to_desi":30,"price":242}],"overflow_base_desi":30,"overflow_base_price":242,"extra_per_desi":24,"pod_fee":13}}'::jsonb
+  ),
+  (
+    'kolaygelsin',
+    'Kolay Gelsin',
+    TRUE,
+    FALSE,
+    FALSE,
+    '{"quote":{"estimated_days":"1-3","tiers":[{"up_to_desi":3,"price":132},{"up_to_desi":10,"price":151},{"up_to_desi":30,"price":235}],"overflow_base_desi":30,"overflow_base_price":235,"extra_per_desi":23.34,"pod_fee":0}}'::jsonb
+  )
+ON CONFLICT (code) DO UPDATE
+SET
+  config = EXCLUDED.config,
+  title = EXCLUDED.title,
+  supports_pod = EXCLUDED.supports_pod;
 
-INSERT INTO pricing_plans (code, title, description, is_public)
+INSERT INTO pricing_plans (code, title, description, is_public, rules)
 VALUES
-  ('standart', 'Standart Liste', 'Varsayılan fiyat listesi', TRUE),
-  ('kurumsal', 'Kurumsal Liste', 'Yüksek hacim indirimleri', TRUE)
-ON CONFLICT (code) DO NOTHING;
+  (
+    'standart',
+    'Standart Liste',
+    'Varsayılan fiyat listesi',
+    TRUE,
+    '{"carriers":{"yurtici":{"pod_fee":12},"aras":{"pod_fee":14},"mng":{"pod_fee":11},"ptt":{"pod_fee":0},"hepsijet":{"pod_fee":10},"surat":{"pod_fee":13},"kolaygelsin":{"pod_fee":0}}}'::jsonb
+  ),
+  (
+    'kurumsal',
+    'Kurumsal Liste',
+    'Yüksek hacim indirimleri',
+    TRUE,
+    '{"carriers":{"yurtici":{"pod_fee":8},"aras":{"pod_fee":10},"mng":{"pod_fee":8},"hepsijet":{"pod_fee":8},"surat":{"pod_fee":9}}}'::jsonb
+  )
+ON CONFLICT (code) DO UPDATE
+SET rules = EXCLUDED.rules;
 
 -- Demo kullanıcı: demo@navlun.local / Demo123!
 INSERT INTO users (email, password_hash, first_name, last_name, phone, user_type, status)
@@ -57,6 +126,22 @@ SELECT a.id, p.id
 FROM accounts a, pricing_plans p
 WHERE a.account_code = 'DEMO001' AND p.code = 'standart'
 ON CONFLICT DO NOTHING;
+
+INSERT INTO addresses (account_id, label, contact_name, phone, city, district, address_line, is_default)
+SELECT a.id, 'Merkez Depo', 'Demo Lojistik A.Ş.', '+905551234567', 'İstanbul', 'Kadıköy', 'Caferağa Mah. Demo Sk. No:1', TRUE
+FROM accounts a
+WHERE a.account_code = 'DEMO001'
+  AND NOT EXISTS (
+    SELECT 1 FROM addresses ad WHERE ad.account_id = a.id AND ad.label = 'Merkez Depo'
+  );
+
+INSERT INTO addresses (account_id, label, contact_name, phone, city, district, address_line, is_default)
+SELECT a.id, 'Şube Cizre', 'Demo Şube', '+905559876543', 'Şırnak', 'Cizre', 'Merkez Mah. Lojistik Cad. No:5', FALSE
+FROM accounts a
+WHERE a.account_code = 'DEMO001'
+  AND NOT EXISTS (
+    SELECT 1 FROM addresses ad WHERE ad.account_id = a.id AND ad.label = 'Şube Cizre'
+  );
 
 -- Örnek kargolar
 INSERT INTO cargos (

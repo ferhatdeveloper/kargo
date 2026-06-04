@@ -37,6 +37,10 @@ Bkz. migration dosyaları `db/migrations/` — kullanıcı, hesap, kargo, ürün
 | `GET /auth/me` | `POST /rpc/auth_me` |
 | `POST /users/:id/accounts/query` | `POST /rpc/user_accounts_query` |
 | `POST /accounts/:id/cargos/query` | `POST /rpc/account_cargos_query` |
+| Kargo fiyat karşılaştırma | `POST /rpc/account_cargo_quote` |
+| Kargo oluşturma | `POST /rpc/account_cargo_create` |
+| Adres defteri | `POST /rpc/account_addresses_query` |
+| Etiket ayarları | `POST /rpc/account_label_settings_get` / `_save` |
 
 ## Ortam değişkenleri
 
