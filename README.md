@@ -16,6 +16,16 @@ npm run dev
 
 Uygulama `http://localhost:5173/tr/auth/login` adresinde açılır. API istekleri varsayılan olarak `https://api.kargopaneli.com/v1` adresine Vite proxy ile yönlendirilir.
 
+### Yerel veritabanı (PostgreSQL + PostgREST)
+
+```bash
+make db-up          # veya: docker compose up -d
+# PostgREST: http://127.0.0.1:3000
+# Demo: demo@stocado.local / Demo123!
+```
+
+Ayrıntılar: [db/README.md](db/README.md)
+
 ## Özellikler
 
 - Türkçe arayüz (`/tr` rotaları)

@@ -29,6 +29,13 @@ All commands run inside `portal/` — see root `README.md` for the same scripts.
 - Copy `portal/.env.example` to `portal/.env` if needed. Leave `VITE_API_BASE_URL` empty to use the Vite dev proxy (default).
 - Do not commit credentials or session tokens.
 
+### Veritabanı (PostgreSQL + PostgREST)
+
+- `docker compose up -d` — Postgres `:5432`, PostgREST `:3000`
+- Migrations: `db/migrations/*.sql` (init container’da otomatik)
+- Demo: `demo@stocado.local` / `Demo123!`
+- PostgREST 12 JWT: `auth_user_id()` `request.jwt.claims` JSON kullanır (`013_jwt_claims_postgrest12.sql`)
+
 ### Hello-world / smoke test
 
 1. `cd portal && npm run dev`
