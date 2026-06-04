@@ -8,6 +8,10 @@ import { DashboardPage } from '@/pages/dashboard/DashboardPage'
 import { CargosPage } from '@/pages/cargos/CargosPage'
 import { CreateCargoPage } from '@/pages/cargos/CreateCargoPage'
 import { PricingPlansPage } from '@/pages/pricing/PricingPlansPage'
+import { IntegrationsPage } from '@/pages/integrations/IntegrationsPage'
+import { ProductsPage } from '@/pages/products/ProductsPage'
+import { SettingsPage } from '@/pages/settings/SettingsPage'
+import { StatisticsPage } from '@/pages/statistics/StatisticsPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
 import { useAuth } from '@/hooks/useAuth'
 import { LegacyLocaleRedirect } from './LegacyLocaleRedirect'
@@ -59,6 +63,18 @@ function accountRoutes() {
     }
     if (path === 'pricing-plans') {
       return <Route key={path} path="pricing-plans" element={<PricingPlansPage />} />
+    }
+    if (path === 'integrations') {
+      return <Route key={path} path="integrations" element={<IntegrationsPage />} />
+    }
+    if (path === 'products') {
+      return <Route key={path} path="products" element={<ProductsPage />} />
+    }
+    if (path === 'settings') {
+      return <Route key={path} path="settings" element={<SettingsPage />} />
+    }
+    if (path === 'statistics') {
+      return <Route key={path} path="statistics" element={<StatisticsPage />} />
     }
     return (
       <Route

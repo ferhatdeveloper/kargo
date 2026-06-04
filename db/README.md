@@ -41,6 +41,13 @@ Bkz. migration dosyaları `db/migrations/` — kullanıcı, hesap, kargo, ürün
 | Kargo oluşturma | `POST /rpc/account_cargo_create` |
 | Adres defteri | `POST /rpc/account_addresses_query` |
 | Etiket ayarları | `POST /rpc/account_label_settings_get` / `_save` |
+| Dashboard metrikleri | `POST /rpc/account_dashboard_metrics` |
+| Bakiye / K.Ö özeti | `POST /rpc/account_finance_summary` |
+| Ürün listesi | `POST /rpc/account_products_query` |
+| Entegrasyonlar | `POST /rpc/account_integrations_query` |
+| Filtreli kargo listesi | `POST /rpc/account_cargos_query` (+ `p_tab`, `p_filters`) |
+
+Migration `015_stocado_parity.sql` Stocado kolonları ve filtreleri ekler.
 
 ## Ortam değişkenleri
 

@@ -6,6 +6,7 @@ import {
   Grid,
   Group,
   NumberInput,
+  Radio,
   Select,
   Stack,
   Stepper,
@@ -27,7 +28,9 @@ import {
   fetchLabelSettings,
   saveLabelSettings,
 } from '@/api/shipping'
+import { queryProducts } from '@/api/products'
 import { CarrierQuoteCompare } from '@/components/cargo/CarrierQuoteCompare'
+import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
 import { LabelDesigner } from '@/components/cargo/LabelDesigner'
 import { ShippingLabelPreview } from '@/components/cargo/ShippingLabelPreview'
 import { useAuth } from '@/hooks/useAuth'
@@ -70,6 +73,11 @@ export function CreateCargoPage() {
       pay_on_delivery: false,
       pod_amount: 0,
       is_draft: false,
+      product_id: '',
+      manual_desi: 0,
+      receiver_pays: false,
+      controlled_delivery: false,
+      shipment_mode: 'send',
     },
     validate: {
       receiver_name: (v) => (v.trim().length < 2 ? 'Alıcı adı gerekli' : null),
@@ -88,6 +96,12 @@ export function CreateCargoPage() {
     },
     400,
   )
+
+  const { data: productsData } = useQuery({
+    queryKey: ['products-select', selectedAccountId],
+    queryFn: () => queryProducts(selectedAccountId!, 1, 50),
+    enabled: !!selectedAccountId,
+  })
 
   const { data: addresses = [] } = useQuery({
     queryKey: ['addresses', selectedAccountId],
@@ -246,37 +260,90 @@ export function CreateCargoPage() {
     label: `${a.label ?? a.contact_name} — ${a.city}`,
   }))
 
+  const productOptions = (productsData?.items ?? []).map((p) => ({
+    value: p.id,
+    label: `${p.title} (${p.sku})`,
+  }))
+
+  const sidePanel = (
+    <Card withBorder padding="lg" radius="md">
+      <Stack gap="sm">
+        <Button fullWidth size="md">
+          Kargo Gönder
+        </Button>
+        <Button fullWidth variant="default">
+          Kargo Bana Gelsin
+        </Button>
+        <Title order={6} mt="md">
+          Tekliflerim
+        </Title>
+        <Text size="sm" c="dimmed">
+          {desi > 0 && quoteResult?.quotes.length
+            ? `${quoteResult.quotes.length} taşıyıcı teklifi hazır.`
+            : 'Teklifleri görmek için boyut ve ağırlık bilgilerini güncelleyin.'}
+        </Text>
+        {selectedQuote && (
+          <Text fw={700} c="blue">
+            Seçili: {selectedQuote.title} — {selectedQuote.total.toFixed(2)} ₺
+          </Text>
+        )}
+      </Stack>
+    </Card>
+  )
+
   return (
     <Stack gap="lg" className="create-cargo-page">
       <Group justify="space-between" wrap="wrap">
         <div>
           <Title order={2}>Yeni Kargo Oluştur</Title>
-          <Text c="dimmed" size="sm">
-            Gönderi bilgilerini girin, taşıyıcı fiyatlarını karşılaştırın ve etiketi yazdırın.
-          </Text>
         </div>
-        <Button component={Link} to={`/accounts/${selectedAccountId}/cargos`} variant="subtle">
-          Listeye dön
-        </Button>
+        <Group>
+          <AccountFinanceBadges accountId={selectedAccountId} />
+          <Button component={Link} to={`/accounts/${selectedAccountId}/cargos`} variant="subtle">
+            Listeye dön
+          </Button>
+        </Group>
       </Group>
 
+      <Grid align="flex-start">
+        <Grid.Col span={{ base: 12, lg: 8 }}>
       <Stepper active={active} onStepClick={setActive} allowNextStepsSelect={false}>
-        <Stepper.Step label="Adresler" description="Gönderici ve alıcı">
+        <Stepper.Step label="Gönderici ve Alıcı" description="Adres bilgileri">
           <Card withBorder padding="lg" mt="md">
             <Grid>
               <Grid.Col span={{ base: 12, md: 6 }}>
-                <Select
-                  label="Gönderici adresi"
-                  placeholder="Adres seçin"
-                  data={addressOptions}
-                  value={form.values.sender_key || addressOptions[0]?.value || null}
-                  onChange={(v) => form.setFieldValue('sender_key', v ?? '')}
-                />
+                <Group align="flex-end" wrap="nowrap">
+                  <Select
+                    style={{ flex: 1 }}
+                    label="Gönderici Bilgileri"
+                    placeholder="Gönderici seçin"
+                    data={addressOptions}
+                    value={form.values.sender_key || addressOptions[0]?.value || null}
+                    onChange={(v) => form.setFieldValue('sender_key', v ?? '')}
+                  />
+                  <Button variant="light" px="sm">
+                    +
+                  </Button>
+                </Group>
               </Grid.Col>
               <Grid.Col span={{ base: 12, md: 6 }}>
+                <Group align="flex-end" wrap="nowrap">
+                  <Select
+                    style={{ flex: 1 }}
+                    label="Alıcı Bilgileri"
+                    placeholder="Alıcı Adres Seçin"
+                    data={[]}
+                    searchable
+                    clearable
+                  />
+                  <Button variant="light" px="sm">
+                    +
+                  </Button>
+                </Group>
                 <TextInput
                   label="Alıcı adı"
                   required
+                  mt="sm"
                   {...form.getInputProps('receiver_name')}
                 />
                 <TextInput
@@ -303,14 +370,48 @@ export function CreateCargoPage() {
           </Card>
         </Stepper.Step>
 
-        <Stepper.Step label="Paket" description="Ölçü ve desi">
+        <Stepper.Step label="Paket Bilgisi" description="Ürün ve ölçü">
           <Card withBorder padding="lg" mt="md">
+            <Radio.Group
+              label="Kapıda Ödeme Seçeneği"
+              value={form.values.pay_on_delivery ? 'pod' : 'none'}
+              onChange={(v) => form.setFieldValue('pay_on_delivery', v === 'pod')}
+              mb="md"
+            >
+              <Group mt="xs">
+                <Radio value="pod" label="Kapıda Ödeme" />
+              </Group>
+            </Radio.Group>
+            <Group align="flex-end" mb="md">
+              <Select
+                style={{ flex: 1 }}
+                label="Paket Bilgileri"
+                placeholder="Ürün Seçin"
+                data={productOptions}
+                value={form.values.product_id || null}
+                onChange={(v) => form.setFieldValue('product_id', v ?? '')}
+                searchable
+              />
+              <Button variant="light">+</Button>
+            </Group>
             <Textarea
-              label="İçerik açıklaması"
-              placeholder="Kargonun içeriği hakkında kısa açıklama"
+              label="Açıklama"
+              description="Kargonun içeriği hakkında açıklama giriniz."
               mb="md"
               {...form.getInputProps('content_description')}
             />
+            <NumberInput
+              label="Desi (kg)"
+              required
+              min={0}
+              decimalScale={2}
+              value={form.values.manual_desi || desi}
+              onChange={(v) => form.setFieldValue('manual_desi', Number(v) || 0)}
+              mb="sm"
+            />
+            <Text size="sm" c="dimmed" mb="md" ta="center">
+              ya da
+            </Text>
             <Grid>
               <Grid.Col span={3}>
                 <NumberInput label="En (cm)" min={0} {...form.getInputProps('length_cm')} />
@@ -336,32 +437,40 @@ export function CreateCargoPage() {
           </Card>
         </Stepper.Step>
 
-        <Stepper.Step label="Ek hizmetler" description="K.Ö ve taslak">
+        <Stepper.Step label="Ek Hizmetler" description="Opsiyonlar">
           <Card withBorder padding="lg" mt="md">
-            <Switch
-              label="Kapıda ödeme"
-              checked={form.values.pay_on_delivery}
-              onChange={(e) => form.setFieldValue('pay_on_delivery', e.currentTarget.checked)}
-            />
             {form.values.pay_on_delivery && (
               <NumberInput
                 label="Kapıda ödeme tutarı (₺)"
                 min={0}
                 decimalScale={2}
-                mt="md"
+                mb="md"
                 {...form.getInputProps('pod_amount')}
               />
             )}
-            <Switch
-              label="Taslak olarak kaydet"
-              mt="lg"
-              checked={form.values.is_draft}
-              onChange={(e) => form.setFieldValue('is_draft', e.currentTarget.checked)}
-            />
+            <Stack gap="sm">
+              <Switch
+                label="Kapıda Alıcı Ödemeli"
+                checked={form.values.receiver_pays}
+                onChange={(e) => form.setFieldValue('receiver_pays', e.currentTarget.checked)}
+              />
+              <Switch
+                label="Kontrollü Teslimat"
+                checked={form.values.controlled_delivery}
+                onChange={(e) =>
+                  form.setFieldValue('controlled_delivery', e.currentTarget.checked)
+                }
+              />
+              <Switch
+                label="Taslak Kargo Oluştur"
+                checked={form.values.is_draft}
+                onChange={(e) => form.setFieldValue('is_draft', e.currentTarget.checked)}
+              />
+            </Stack>
           </Card>
         </Stepper.Step>
 
-        <Stepper.Step label="Teklif ve etiket" description="Karşılaştırma">
+        <Stepper.Step label="Teklif ve Özet" description="Fiyat ve etiket">
           <Grid mt="md">
             <Grid.Col span={{ base: 12, lg: 8 }}>
               <Card withBorder padding="lg" mb="md">
@@ -411,27 +520,26 @@ export function CreateCargoPage() {
       </Stepper>
 
       <Group justify="space-between" mt="md" className="no-print">
-        {active > 0 && (
-          <Button variant="default" onClick={() => setActive((c) => c - 1)}>
-            Geri
-          </Button>
-        )}
-        <Group ml="auto">
-          {active < 3 && (
-            <Button onClick={nextStep}>
-              İleri
+        <Button variant="subtle" onClick={() => form.reset()}>
+          Temizle
+        </Button>
+        <Group>
+          {active > 0 && (
+            <Button variant="default" onClick={() => setActive((c) => c - 1)}>
+              Geri
             </Button>
           )}
+          {active < 3 && <Button onClick={nextStep}>İleri</Button>}
           {active === 3 && (
-            <Button
-              loading={createMutation.isPending}
-              onClick={() => createMutation.mutate()}
-            >
-              {form.values.is_draft ? 'Taslağı kaydet' : 'Kargo oluştur'}
+            <Button loading={createMutation.isPending} onClick={() => createMutation.mutate()}>
+              Kargo Oluştur
             </Button>
           )}
         </Group>
       </Group>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, lg: 4 }}>{sidePanel}</Grid.Col>
+      </Grid>
 
       <style>{`
         @media print {

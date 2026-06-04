@@ -176,8 +176,26 @@ LEFT JOIN cargo_companies cc ON cc.code = 'yurtici'
 WHERE a.account_code = 'DEMO001' AND u.email = 'demo@navlun.local'
 ON CONFLICT (account_id, tracking_number) DO NOTHING;
 
-INSERT INTO products (account_id, sku, title, unit_price, stock_quantity)
-SELECT a.id, 'SKU-' || g, 'Ürün ' || g, 99.90 + g, 100 - g
+UPDATE cargos c
+SET
+  sender_name = 'Demo Lojistik A.Ş.',
+  sender_company = 'Demo Lojistik',
+  receiver_city = (ARRAY['İstanbul', 'Ankara', 'Kayseri', 'İzmir', 'Bursa'])[1 + (substring(c.tracking_number from '.{2}$'))::int % 5],
+  receiver_district = 'Merkez',
+  carrier_barcode = 'ADO' || substr(c.tracking_number, 5, 12),
+  reference_barcode = substr(c.tracking_number, 5, 12),
+  last_movement = (ARRAY['Transferde', 'Dağıtımda', 'Teslimat Şubesi', 'Teslim Edildi', 'Çıkış Şubesi'])[1 + (random() * 4)::int],
+  last_movement_description = 'Operasyon kaydı',
+  payment_status = CASE WHEN c.pay_on_delivery THEN 'Tahsil Edilecek' ELSE NULL END,
+  payment_type = CASE WHEN c.pay_on_delivery THEN 'Nakit' ELSE NULL END,
+  desi = coalesce(c.desi, 3.0)
+FROM accounts a
+WHERE c.account_id = a.id AND a.account_code = 'DEMO001';
+
+UPDATE accounts SET balance = 648.52 WHERE account_code = 'DEMO001';
+
+INSERT INTO products (account_id, sku, title, unit_price, width_cm, height_cm, length_cm, desi, stock_quantity)
+SELECT a.id, 'SKU-' || g, 'Ürün ' || g, 99.90 + g, 10 + g, 12 + g, 15 + g, 3, 100 - g
 FROM accounts a, generate_series(1, 5) g
 WHERE a.account_code = 'DEMO001'
 ON CONFLICT (account_id, sku) DO NOTHING;
