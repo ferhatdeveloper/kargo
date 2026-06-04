@@ -13,6 +13,7 @@ import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { IconLock, IconMail } from '@tabler/icons-react'
 import { Link, useNavigate } from 'react-router-dom'
+import { isPostgrest } from '@/api/config'
 import { Logo } from '@/components/Logo'
 import { useAuth } from '@/context/AuthContext'
 import formClasses from './authForm.module.css'
@@ -53,6 +54,12 @@ export function LoginPage() {
         <p className={formClasses.subtitle}>
           Hesabınıza giriş yaparak kargo panelinize erişin.
         </p>
+        {import.meta.env.DEV && isPostgrest && (
+          <Text size="xs" c="dimmed" mt="sm">
+            Yerel veritabanı: <strong>demo@navlun.local</strong> veya{' '}
+            <strong>demo@stocado.local</strong> — şifre <strong>Demo123!</strong>
+          </Text>
+        )}
       </header>
 
       <Paper className={formClasses.card} radius="lg">

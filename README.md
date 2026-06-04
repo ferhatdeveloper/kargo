@@ -11,10 +11,14 @@ B2B **kargo ve lojistik müşteri paneli** — gönderi, entegrasyon, finans ve 
 ## Geliştirme
 
 ```bash
+cp portal/.env.example portal/.env   # yerel PostgREST
+docker compose up -d                 # DB + API :3000
 cd portal
 npm install
 npm run dev
 ```
+
+Giriş (yerel): `demo@navlun.local` / `Demo123!` (eski volume’da `demo@stocado.local` da çalışır)
 
 Uygulama `http://localhost:5173/tr/auth/login` adresinde açılır. API istekleri varsayılan olarak harici kargo API’sine Vite proxy ile yönlendirilir (`portal/vite.config.ts`).
 
