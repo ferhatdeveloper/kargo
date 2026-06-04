@@ -14,7 +14,6 @@ import {
 import { IconAlertTriangle } from '@tabler/icons-react'
 import { useState } from 'react'
 import { fetchDashboardMetrics } from '@/api/dashboard'
-import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
 import { useAuth } from '@/hooks/useAuth'
 
 export function StatisticsPage() {
@@ -40,19 +39,16 @@ export function StatisticsPage() {
             Kargo performansı, teslimat ve iade analizleri
           </Text>
         </div>
-        <Group>
-          <SegmentedControl
-            value={range}
-            onChange={setRange}
-            data={[
-              { label: '1 Ay', value: '1' },
-              { label: '3 Ay', value: '3' },
-              { label: '6 Ay', value: '6' },
-              { label: '1 Yıl', value: '12' },
-            ]}
-          />
-          <AccountFinanceBadges accountId={selectedAccountId} />
-        </Group>
+        <SegmentedControl
+          value={range}
+          onChange={setRange}
+          data={[
+            { label: '1 Ay', value: '1' },
+            { label: '3 Ay', value: '3' },
+            { label: '6 Ay', value: '6' },
+            { label: '1 Yıl', value: '12' },
+          ]}
+        />
       </Group>
 
       <Alert

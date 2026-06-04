@@ -21,7 +21,6 @@ import {
 } from '@tabler/icons-react'
 import { useState } from 'react'
 import { fetchDashboardMetrics } from '@/api/dashboard'
-import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
 import { useAuth } from '@/hooks/useAuth'
 
 const metricDefs = [
@@ -81,9 +80,7 @@ export function DashboardPage() {
             {account?.name}
           </Text>
         </div>
-        <Group gap="md">
-          <AccountFinanceBadges accountId={selectedAccountId} />
-          <Menu shadow="md">
+        <Menu shadow="md">
             <Menu.Target>
               <Card withBorder padding="xs" px="md" style={{ cursor: 'pointer' }}>
                 <Text size="sm" fw={600}>
@@ -99,7 +96,6 @@ export function DashboardPage() {
               ))}
             </Menu.Dropdown>
           </Menu>
-        </Group>
       </Group>
 
       <Tabs value={section} onChange={setSection}>

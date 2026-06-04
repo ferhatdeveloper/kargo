@@ -50,7 +50,11 @@ export function ListToolbar({
           <IconDownload size={18} />
         </ActionIcon>
         {onOpenFilters && (
-          <Button leftSection={<IconFilter size={16} />} onClick={onOpenFilters}>
+          <Button
+            className="stocado-filter-btn"
+            leftSection={<IconFilter size={16} />}
+            onClick={onOpenFilters}
+          >
             Filtreler
           </Button>
         )}

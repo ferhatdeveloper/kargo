@@ -14,7 +14,6 @@ import {
 } from '@mantine/core'
 import { useMemo, useState } from 'react'
 import { fetchCargoQuote } from '@/api/shipping'
-import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
 import { PRICING_CARRIER_TABS } from '@/config/stocadoCatalog'
 import { useAuth } from '@/hooks/useAuth'
 import { computeChargeableDesi, formatTry } from '@/lib/shipping'
@@ -61,10 +60,9 @@ export function PricingPlansPage() {
 
   return (
     <Stack gap="lg">
-      <Group justify="space-between" wrap="wrap">
-        <Title order={2}>Kargo Fiyat Listesi</Title>
-        <AccountFinanceBadges accountId={selectedAccountId} />
-      </Group>
+      <Title order={2} className="stocado-page-title">
+        Kargo Fiyat Listesi
+      </Title>
 
       <Tabs
         value={carrier}

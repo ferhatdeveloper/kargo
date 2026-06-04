@@ -15,7 +15,6 @@ import { IconLock, IconMail } from '@tabler/icons-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { isPostgrest } from '@/api/config'
 import { getApiErrorMessage } from '@/api/errors'
-import { Logo } from '@/components/Logo'
 import { useAuth } from '@/hooks/useAuth'
 import { useLocale } from '@/hooks/useLocale'
 import formClasses from './authForm.module.css'
@@ -52,25 +51,28 @@ export function LoginPage() {
 
   return (
     <div className={formClasses.wrapper}>
-      <div className={formClasses.mobileLogo}>
-        <Logo h={40} />
-      </div>
-
       <header className={formClasses.header}>
         <h1 className={formClasses.title}>{t('auth.welcome')}</h1>
-        <p className={formClasses.subtitle}>{t('auth.subtitle')}</p>
-        {import.meta.env.DEV && isPostgrest && (
-          <Text size="xs" c="dimmed" mt="sm">
-            {t('auth.localHint', {
-              email1: 'demo@navlun.local',
-              email2: 'demo@stocado.local',
-              password: 'Demo123!',
-            })}
-          </Text>
-        )}
       </header>
 
-      <Paper className={formClasses.card} radius="lg">
+      <Text className={formClasses.registerRow}>
+        {t('auth.registerPrompt')}{' '}
+        <Anchor component={Link} to="/auth/register" fw={600} c="#0d87f7">
+          {t('auth.register')}
+        </Anchor>
+      </Text>
+
+      {import.meta.env.DEV && isPostgrest && (
+        <Text size="xs" c="dimmed" mb="md" ta="center">
+          {t('auth.localHint', {
+            email1: 'demo@navlun.local',
+            email2: 'demo@stocado.local',
+            password: 'Demo123!',
+          })}
+        </Text>
+      )}
+
+      <Paper className={formClasses.card} radius="sm">
         <form onSubmit={handleSubmit}>
           <Stack gap="md">
             <TextInput
@@ -111,13 +113,6 @@ export function LoginPage() {
           </Stack>
         </form>
       </Paper>
-
-      <Text className={formClasses.footerHint}>
-        {t('auth.registerPrompt')}{' '}
-        <Anchor component={Link} to="/auth/register" fw={600}>
-          {t('auth.register')}
-        </Anchor>
-      </Text>
     </div>
   )
 }

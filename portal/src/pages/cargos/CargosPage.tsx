@@ -21,18 +21,22 @@ import { useMemo, useState } from 'react'
 import { useDebouncedValue } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { queryCargos } from '@/api/cargos'
-import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
+import { STOCADO_BLUE } from '@/theme'
 import { CargoFiltersDrawer } from '@/components/cargo/CargoFiltersDrawer'
 import { ListToolbar } from '@/components/table/ListToolbar'
 import { useAuth } from '@/hooks/useAuth'
 import { formatDateTime, formatMoneyTry } from '@/lib/format'
 import type { CargoFilters, CargoListItem, CargoListTab } from '@/types/cargo'
 
-function movementColor(movement?: string) {
-  if (movement === 'Teslim Edildi') return 'teal'
-  if (movement === 'Entegrasyon Hatası') return 'red'
-  if (movement === 'Dağıtımda' || movement === 'Transferde') return 'cyan'
-  return 'blue'
+function movementBadgeProps(movement?: string) {
+  if (movement === 'Teslim Edildi') {
+    return { color: 'teal' as const, styles: { root: { backgroundColor: '#06b6d4', color: '#fff' } } }
+  }
+  if (movement === 'Entegrasyon Hatası') return { color: 'red' as const }
+  return {
+    color: 'blue' as const,
+    styles: { root: { backgroundColor: STOCADO_BLUE, color: '#fff' } },
+  }
 }
 
 function copyText(label: string, value?: string) {
@@ -130,7 +134,7 @@ export function CargosPage() {
             <Table.Td>{c.receiver_district ?? '—'}</Table.Td>
             <Table.Td>{c.receiver_phone ?? '—'}</Table.Td>
             <Table.Td>
-              <Badge color={movementColor(c.last_movement)} variant="light">
+              <Badge variant="filled" {...movementBadgeProps(c.last_movement)}>
                 {c.last_movement ?? '—'}
               </Badge>
             </Table.Td>
@@ -237,10 +241,9 @@ export function CargosPage() {
 
   return (
     <Stack gap="md">
-      <Group justify="space-between" wrap="wrap">
-        <Title order={2}>Kargolarım</Title>
-        <AccountFinanceBadges accountId={selectedAccountId} />
-      </Group>
+      <Title order={2} className="stocado-page-title">
+        Kargolarım
+      </Title>
 
       <Tabs
         value={tab}
@@ -311,7 +314,7 @@ export function CargosPage() {
         )}
 
         {items.length > 0 && (
-          <ScrollArea.Autosize mah={520} type="auto">
+          <ScrollArea.Autosize mah={520} type="auto" className="stocado-table-wrap">
             {tab === 'pod' ? renderPodTable(items) : renderAllTable(items)}
           </ScrollArea.Autosize>
         )}

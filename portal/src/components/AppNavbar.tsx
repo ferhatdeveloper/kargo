@@ -28,7 +28,6 @@ interface AppNavbarProps {
 function MenuLink({
   labelKey,
   icon: Icon,
-  color,
   path,
   children,
 }: MenuItem) {
@@ -44,7 +43,6 @@ function MenuLink({
         <NavLink
           label={label}
           leftSection={<Icon size={20} stroke={1.5} />}
-          color={color}
           active={active}
           opened={opened}
           onChange={setOpened}
@@ -73,7 +71,6 @@ function MenuLink({
       to={path}
       label={label}
       leftSection={<Icon size={20} stroke={1.5} />}
-      color={color}
       active={active}
     />
   )

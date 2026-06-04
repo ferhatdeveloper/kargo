@@ -15,7 +15,6 @@ import {
 import { IconSearch } from '@tabler/icons-react'
 import { useMemo, useState } from 'react'
 import { fetchIntegrations } from '@/api/integrations'
-import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
 import { MARKETPLACE_PROVIDERS } from '@/config/stocadoCatalog'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -41,10 +40,9 @@ export function IntegrationsPage() {
 
   return (
     <Stack gap="lg">
-      <Group justify="space-between" wrap="wrap">
-        <Title order={2}>Entegrasyonlar</Title>
-        <AccountFinanceBadges accountId={selectedAccountId} />
-      </Group>
+      <Title order={2} className="stocado-page-title">
+        Entegrasyonlar
+      </Title>
 
       <Tabs value={tab} onChange={setTab}>
         <Tabs.List>

@@ -17,7 +17,6 @@ import { IconPlus, IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useDebouncedValue } from '@mantine/hooks'
 import { queryProducts } from '@/api/products'
-import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
 import { ListToolbar } from '@/components/table/ListToolbar'
 import { useAuth } from '@/hooks/useAuth'
 import { formatDateTime, formatMoneyTry } from '@/lib/format'
@@ -42,11 +41,10 @@ export function ProductsPage() {
   return (
     <Stack gap="lg">
       <Group justify="space-between" wrap="wrap">
-        <Title order={2}>Ürünlerim</Title>
-        <Group>
-          <AccountFinanceBadges accountId={selectedAccountId} />
-          <Button leftSection={<IconPlus size={16} />}>Yeni Ürün Ekle</Button>
-        </Group>
+        <Title order={2} className="stocado-page-title">
+          Ürünlerim
+        </Title>
+        <Button leftSection={<IconPlus size={16} />}>Yeni Ürün Ekle</Button>
       </Group>
 
       <Tabs defaultValue="all">

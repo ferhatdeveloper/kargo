@@ -13,7 +13,6 @@ import {
   Textarea,
   Title,
 } from '@mantine/core'
-import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
 import { useAuth } from '@/hooks/useAuth'
 
 const permissionOptions = [
@@ -37,10 +36,9 @@ export function SettingsPage() {
 
   return (
     <Stack gap="lg">
-      <Group justify="space-between" wrap="wrap">
-        <Title order={2}>Ayarlar</Title>
-        <AccountFinanceBadges accountId={selectedAccountId} />
-      </Group>
+      <Title order={2} className="stocado-page-title">
+        Ayarlar
+      </Title>
 
       <Tabs defaultValue="account">
         <Tabs.List style={{ flexWrap: 'wrap' }}>

@@ -30,7 +30,6 @@ import {
 } from '@/api/shipping'
 import { queryProducts } from '@/api/products'
 import { CarrierQuoteCompare } from '@/components/cargo/CarrierQuoteCompare'
-import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
 import { LabelDesigner } from '@/components/cargo/LabelDesigner'
 import { ShippingLabelPreview } from '@/components/cargo/ShippingLabelPreview'
 import { useAuth } from '@/hooks/useAuth'
@@ -297,12 +296,9 @@ export function CreateCargoPage() {
         <div>
           <Title order={2}>Yeni Kargo Oluştur</Title>
         </div>
-        <Group>
-          <AccountFinanceBadges accountId={selectedAccountId} />
-          <Button component={Link} to={`/accounts/${selectedAccountId}/cargos`} variant="subtle">
-            Listeye dön
-          </Button>
-        </Group>
+        <Button component={Link} to={`/accounts/${selectedAccountId}/cargos`} variant="subtle">
+          Listeye dön
+        </Button>
       </Group>
 
       <Grid align="flex-start">
