@@ -15,7 +15,7 @@ import { IconPackageExport, IconSearch } from '@tabler/icons-react'
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { queryCargos } from '@/api/cargos'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 
 const statusLabels: Record<number, string> = {
   1: 'Aktif',

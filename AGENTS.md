@@ -23,6 +23,7 @@ All commands run inside `portal/` — see root `README.md`.
 - **Dev:** `npm run dev` → http://localhost:5173/auth/login
 - **Lint:** `npm run lint`
 - **Build:** `npm run build`
+- **Test:** `npm run test` (vitest), `npm run test:smoke` (PostgREST, DB gerekir)
 
 ### Environment
 

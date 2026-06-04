@@ -32,6 +32,13 @@ make db-up          # veya: docker compose up -d
 
 Ayrıntılar: [db/README.md](db/README.md)
 
+### Testler
+
+```bash
+make portal-check    # lint + unit + API smoke + build
+cd portal && npm run test:smoke
+```
+
 ## Özellikler
 
 - Çoklu dil (TR/EN) — dil URL’de değil, `localStorage` + üst bardaki seçici

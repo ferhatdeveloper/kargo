@@ -15,20 +15,20 @@ import { IconLock, IconMail } from '@tabler/icons-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { isPostgrest } from '@/api/config'
 import { Logo } from '@/components/Logo'
-import { useAuth } from '@/context/AuthContext'
-import { useLocale } from '@/context/LocaleContext'
+import { useAuth } from '@/hooks/useAuth'
+import { useLocale } from '@/hooks/useLocale'
 import formClasses from './authForm.module.css'
 import classes from './LoginPage.module.css'
 
 export function LoginPage() {
-  const { login } = useAuth()
   const { t } = useLocale()
+  const { login } = useAuth()
   const navigate = useNavigate()
   const form = useForm({
     initialValues: { email: '', password: '', remember: false },
     validate: {
-      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : 'Invalid email'),
-      password: (v) => (v.trim().length >= 6 ? null : 'Min 6 characters'),
+      email: (v) => (/^\S+@\S+\.\S+$/.test(v) ? null : t('auth.emailInvalid')),
+      password: (v) => (v.trim().length >= 6 ? null : t('auth.passwordMin')),
     },
   })
 

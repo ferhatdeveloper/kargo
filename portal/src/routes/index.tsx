@@ -7,7 +7,7 @@ import { ForgotPasswordPage } from '@/pages/auth/ForgotPasswordPage'
 import { DashboardPage } from '@/pages/dashboard/DashboardPage'
 import { CargosPage } from '@/pages/cargos/CargosPage'
 import { PlaceholderPage } from '@/pages/PlaceholderPage'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 import { LegacyLocaleRedirect } from './LegacyLocaleRedirect'
 
 function HomeRedirect() {
