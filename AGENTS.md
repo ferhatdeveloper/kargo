@@ -26,7 +26,8 @@ All commands run inside `portal/` — see root `README.md`.
 
 ### Environment
 
-- `portal/.env` — `VITE_API_BASE_URL` boş = Vite proxy; yerel PostgREST için `http://127.0.0.1:3000`
+- `portal/.env` — `VITE_API_BACKEND=postgrest` + `VITE_API_BASE_URL=/api` (bkz. `.env.example`)
+- Yerel giriş: `demo@navlun.local` / `Demo123!` (`docker compose up -d` gerekir)
 - Oturum token’larını repoya commit etmeyin.
 
 ### Veritabanı (PostgreSQL + PostgREST)
