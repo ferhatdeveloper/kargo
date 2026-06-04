@@ -8,6 +8,12 @@ This document provides a detailed visual comparison between Stocado Portal (http
 
 ---
 
+## Not (ürün kararı)
+
+**Giriş sayfası (`/auth/*`) Navlun split-layout olarak korunur** — Stocado tek-kolon login uygulanmaz.
+
+---
+
 ## 1. Login Page Layout
 
 ### **Stocado**

@@ -5,7 +5,7 @@ export const localeStorageKey = 'navlun-locale'
 
 export const messages = {
   tr: {
-    'auth.welcome': 'Tekrar hoş geldiniz!',
+    'auth.welcome': 'Tekrar hoş geldiniz',
     'auth.subtitle': 'Hesabınıza giriş yaparak kargo panelinize erişin.',
     'auth.email': 'E-posta',
     'auth.emailPlaceholder': 'ornek@firma.com',
