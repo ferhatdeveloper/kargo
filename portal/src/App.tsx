@@ -1,6 +1,8 @@
 import '@mantine/core/styles.css'
 import '@mantine/notifications/styles.css'
 import '@mantine/dates/styles.css'
+import '@mantine/charts/styles.css'
+import './styles/global.css'
 import { MantineProvider, localStorageColorSchemeManager } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -21,7 +23,7 @@ const colorSchemeManager = localStorageColorSchemeManager({ key: 'navlun-color-s
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider theme={theme} colorSchemeManager={colorSchemeManager} defaultColorScheme="light">
+      <MantineProvider theme={theme} colorSchemeManager={colorSchemeManager} defaultColorScheme="light" forceColorScheme="light">
         <Notifications position="top-right" />
         <BrowserRouter>
           <LocaleProvider>

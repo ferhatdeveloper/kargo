@@ -4,8 +4,12 @@
  * exit 0 = başarılı
  */
 const BASE = process.env.POSTGREST_URL || 'http://127.0.0.1:3000'
-const EMAIL = process.env.DEMO_EMAIL || 'demo@navlun.local'
 const PASS = process.env.DEMO_PASSWORD || 'Demo123!'
+const EMAIL_CANDIDATES = [
+  process.env.DEMO_EMAIL,
+  'demo@navlun.local',
+  'demo@stocado.local',
+].filter(Boolean)
 
 async function post(path, body, token) {
   const res = await fetch(`${BASE}${path}`, {
@@ -29,15 +33,29 @@ async function post(path, body, token) {
   return data
 }
 
+async function loginWithDemoUser() {
+  let lastError
+  for (const email of EMAIL_CANDIDATES) {
+    try {
+      const login = await post('/rpc/auth_login', {
+        p_email: email,
+        p_password: PASS,
+        p_remember: false,
+      })
+      if (login.token && login.user?.id) {
+        return { login, email }
+      }
+    } catch (e) {
+      lastError = e
+    }
+  }
+  throw lastError ?? new Error('No demo user could log in')
+}
+
 async function main() {
   console.log('PostgREST smoke:', BASE)
-  const login = await post('/rpc/auth_login', {
-    p_email: EMAIL,
-    p_password: PASS,
-    p_remember: false,
-  })
-  if (!login.token || !login.user?.id) throw new Error('login missing token/user')
-  console.log('  auth_login OK', login.user.email)
+  const { login, email } = await loginWithDemoUser()
+  console.log('  auth_login OK', login.user.email, `(tried: ${email})`)
 
   const me = await post('/rpc/auth_me', {}, login.token)
   if (me.id !== login.user.id) throw new Error('auth_me id mismatch')

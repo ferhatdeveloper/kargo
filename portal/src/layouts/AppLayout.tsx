@@ -13,6 +13,7 @@ import {
 import { IconChevronDown, IconLogout } from '@tabler/icons-react'
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import { AppNavbar } from '@/components/AppNavbar'
+import { AccountFinanceBadges } from '@/components/layout/AccountFinanceBadges'
 import { LocaleSwitcher } from '@/components/LocaleSwitcher'
 import { useAuth } from '@/hooks/useAuth'
 import { useLocale } from '@/hooks/useLocale'
@@ -53,11 +54,11 @@ export function AppLayout() {
   return (
     <AppShell
       navbar={{
-        width: 280,
+        width: 250,
         breakpoint: 'sm',
         collapsed: { mobile: !mobileOpened },
       }}
-      header={{ height: 60 }}
+      header={{ height: 56 }}
       padding="md"
     >
       <AppShell.Navbar>
@@ -78,12 +79,14 @@ export function AppLayout() {
                 data={accountOptions}
                 value={selectedAccountId}
                 onChange={(v) => v && setSelectedAccountId(v)}
-                w={280}
+                w={240}
                 size="sm"
               />
             )}
-            <LocaleSwitcher />
           </Group>
+          <Group gap="md" wrap="nowrap">
+            <AccountFinanceBadges accountId={selectedAccountId} />
+            <LocaleSwitcher />
           <Menu shadow="md" width={200}>
             <Menu.Target>
               <UnstyledButton>
@@ -112,6 +115,7 @@ export function AppLayout() {
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
+          </Group>
         </Group>
       </AppShell.Header>
 
