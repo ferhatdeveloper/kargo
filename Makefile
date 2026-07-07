@@ -1,26 +1,32 @@
-.PHONY: db-up db-down db-reset db-logs db-psql db-seed api-openapi
+.PHONY: db-up db-down db-reset db-logs db-psql db-seed api-openapi portal-lint portal-test portal-smoke portal-check prod-up prod-down
 
 db-up:
-	docker compose up -d
+	docker compose -f docker-compose.dev.yml up -d
 
 db-down:
-	docker compose down
+	docker compose -f docker-compose.dev.yml down
 
 db-reset:
-	docker compose down -v
-	docker compose up -d
+	docker compose -f docker-compose.dev.yml down -v
+	docker compose -f docker-compose.dev.yml up -d
 
 db-logs:
-	docker compose logs -f db postgrest
+	docker compose -f docker-compose.dev.yml logs -f db postgrest
 
 db-psql:
-	docker compose exec db psql -U navlun -d navlun
+	docker compose -f docker-compose.dev.yml exec db psql -U navlun -d navlun
 
 db-seed:
-	docker compose exec -T db psql -U navlun -d navlun -f /seed/seed.sql
+	docker compose -f docker-compose.dev.yml exec -T db psql -U navlun -d navlun -f /seed/seed.sql
 
 api-openapi:
 	@curl -s http://127.0.0.1:3000/ | head -20
+
+prod-up:
+	docker compose up -d --build
+
+prod-down:
+	docker compose down
 
 portal-lint:
 	cd portal && npm run lint

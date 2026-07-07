@@ -6,50 +6,51 @@ B2B **kargo ve lojistik müşteri paneli** — gönderi, entegrasyon, finans ve 
 
 - `portal/` — React + Vite + Mantine UI frontend
 - `db/` — PostgreSQL şeması (migrations + seed)
-- `docker-compose.yml` — PostgreSQL 16 + PostgREST 12
+- `docker-compose.yml` — Dokploy production (PostgreSQL + PostgREST + Nginx portal)
+- `docker-compose.dev.yml` — yerel geliştirme (yalnızca DB + PostgREST)
 
-## Geliştirme
+## Dokploy ile dağıtım
+
+1. Dokploy'da yeni proje → **Docker Compose** servisi oluşturun.
+2. GitHub reposu: `ferhatdeveloper/kargo`, branch: **main**.
+3. **Compose Path:** `./docker-compose.yml`
+4. Ortam değişkenlerini ayarlayın (`.env.example` referans):
+
+| Değişken | Açıklama |
+|----------|----------|
+| `POSTGRES_PASSWORD` | PostgreSQL şifresi |
+| `PGRST_JWT_SECRET` | JWT imza anahtarı (en az 32 karakter) |
+
+5. **Domains** sekmesinden `portal` servisine domain bağlayın (container port **80**).
+6. Deploy'a tıklayın.
+
+Production'da portal Nginx üzerinden `/api` isteklerini PostgREST'e proxy'ler; ayrı API domain'i gerekmez.
+
+Demo giriş: `demo@navlun.local` / `Demo123!`
+
+## Yerel geliştirme
 
 ```bash
-cp portal/.env.example portal/.env   # yerel PostgREST
-docker compose up -d                 # DB + API :3000
-cd portal
-npm install
-npm run dev
+cp portal/.env.example portal/.env
+make db-up                           # DB + PostgREST :3000
+cd portal && npm install && npm run dev
 ```
 
-Giriş (yerel): `demo@navlun.local` / `Demo123!` (eski volume’da `demo@stocado.local` da çalışır)
-
-Uygulama `http://localhost:5173/auth/login` adresinde açılır. Tüm API istekleri Vite proxy ile **PostgREST**’e gider (`/api` → `http://127.0.0.1:3000`, bkz. `portal/vite.config.ts`).
-
-### Yerel veritabanı (PostgreSQL + PostgREST)
-
-```bash
-make db-up          # veya: docker compose up -d
-# PostgREST: http://127.0.0.1:3000
-# Demo: demo@navlun.local / Demo123!
-```
-
-Ayrıntılar: [db/README.md](db/README.md)
+Uygulama `http://localhost:5173/auth/login` adresinde açılır. API istekleri Vite proxy ile PostgREST'e gider.
 
 ### Testler
 
 ```bash
 make portal-check    # lint + unit + API smoke + build
-cd portal && npm run test:smoke
 ```
 
 ## Özellikler
 
-- Çoklu dil (TR/EN) — dil URL’de değil, `localStorage` + üst bardaki seçici
+- Çoklu dil (TR/EN) — `localStorage` + üst bardaki seçici
 - Giriş, kayıt ve şifremi unuttum
 - Müşteri paneli: gösterge paneli, kargolar, ürünler, faturalar, entegrasyonlar
-- **PostgREST** RPC API (auth, kargolar, fiyat teklifi, kargo oluşturma, etiket ayarları)
-
-## Marka
-
-Ürün adı **Navlun** (lojistik/navlun teriminden). Rakip marka adları UI veya repoda kullanılmaz.
+- PostgREST RPC API (auth, kargolar, fiyat teklifi, kargo oluşturma, etiket ayarları)
 
 ## Güvenlik
 
-Giriş bilgilerini `.env` dosyasına veya repoya eklemeyin. Oturum token’ı yalnızca tarayıcı `localStorage` içinde tutulur.
+Giriş bilgilerini repoya eklemeyin. Üretimde `POSTGRES_PASSWORD` ve `PGRST_JWT_SECRET` değerlerini mutlaka değiştirin.
