@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${NAVLUN_POSTGRES_USER:-navlun}
-      POSTGRES_PASSWORD: ${NAVLUN_POSTGRES_PASSWORD:?NAVLUN_POSTGRES_PASSWORD is required}
+      POSTGRES_PASSWORD: ${NAVLUN_POSTGRES_PASSWORD:-Yq7xwQpt6c}
       POSTGRES_DB: ${NAVLUN_POSTGRES_DB:-navlun}
     volumes:
       - navlun_pg_data:/var/lib/postgresql/data

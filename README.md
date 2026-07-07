@@ -56,4 +56,4 @@ make portal-check
 
 ## Güvenlik
 
-Üretimde `NAVLUN_POSTGRES_PASSWORD` ve `NAVLUN_PGRST_JWT_SECRET` değerlerini mutlaka değiştirin.
+Üretimde `NAVLUN_PGRST_JWT_SECRET` değerini mutlaka değiştirin.
