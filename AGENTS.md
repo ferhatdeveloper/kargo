@@ -45,3 +45,9 @@ All commands run inside `portal/` — see root `README.md`.
 ### tmux
 
 `portal-vite-dev` oturumu için `npm run dev`.
+
+### Non-obvious gotchas (deploy/çalıştırma)
+
+- **Docker daemon:** `make db-up` (Postgres + PostgREST) için Docker gerekir. Snapshot'ta Docker kurulu; `docker` komutu "Cannot connect to the Docker daemon" derse `sudo dockerd` ile başlatın (DinD için `/etc/docker/daemon.json` `fuse-overlayfs` + `containerd-snapshotter:false` ile ayarlıdır).
+- **JWT secret eşleşmesi (401 tuzağı):** DB, JWT'yi `app.jwt_secret` GUC ile imzalar; bu değer `012_auth_rpc.sql` içinde `kargomkapinda-dev-jwt-secret-min-32-chars!!` olarak sabittir. PostgREST bunu `PGRST_JWT_SECRET` ile doğrular. İkisi eşit değilse `auth_login` (anon) 200 döner ama `auth_me`/`user_accounts_query` gibi authenticated çağrılar **401** alır. `PGRST_JWT_SECRET`'i değiştirirseniz, aynı değeri DB'de de ayarlamanız gerekir (`ALTER DATABASE ... SET app.jwt_secret`). `docker-compose.dokploy.yml`'deki varsayılan `PGRST_JWT_SECRET` bu sabitle eşleşmez — üretimde JWT'yi değiştirirken bu iki tarafı senkron tutun.
+- **Dokploy:** Bu repo tek konteynerlik "Application" değil, **Docker Compose** servisi olarak dağıtılmalıdır (`Compose Path: ./docker-compose.dokploy.yml`). Domain'i `kargomkapinda_portal` servisine, port **80**'e bağlayın; Dokploy Traefik etiketleri + `dokploy-network`'ü otomatik enjekte eder (ilk domain sonrası bir kez yeniden deploy gerekebilir).
