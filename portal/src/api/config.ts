@@ -1,4 +1,4 @@
-/** Navlun paneli yalnızca PostgREST (docker compose :3000) üzerinden konuşur. */
+/** Navlun paneli yalnızca PostgREST üzerinden konuşur (yerel dev: :3100). */
 export const apiBackend = (
   import.meta.env.VITE_API_BACKEND?.trim() || 'postgrest'
 ) as 'postgrest' | 'legacy'

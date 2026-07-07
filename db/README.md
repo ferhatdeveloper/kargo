@@ -5,25 +5,25 @@ Navlun müşteri paneli için tam veritabanı şeması. Tablolar `public` şemas
 ## Hızlı başlangıç
 
 ```bash
-# Kök dizinden
-docker compose up -d
-docker compose ps
+# Kök dizinden (RetailEX portlarıyla çakışmaz)
+docker compose -f docker-compose.dev.yml up -d
+docker compose -f docker-compose.dev.yml ps
 ```
 
 | Servis     | Port | Açıklama        |
 |-----------|------|-----------------|
-| PostgreSQL | 5432 | `navlun` / `navlun` |
-| PostgREST  | 3000 | REST + OpenAPI  |
+| PostgreSQL | 5433 | `navlun` / `navlun` |
+| PostgREST  | 3100 | REST + OpenAPI  |
 
 **Demo giriş:** `demo@navlun.local` / `Demo123!`
 
 ```bash
-curl -s -X POST http://127.0.0.1:3000/rpc/auth_login \
+curl -s -X POST http://127.0.0.1:3100/rpc/auth_login \
   -H 'Content-Type: application/json' \
   -d '{"p_email":"demo@navlun.local","p_password":"Demo123!","p_remember":false}'
 ```
 
-OpenAPI: http://127.0.0.1:3000/
+OpenAPI: http://127.0.0.1:3100/
 
 ## Şema özeti
 
@@ -53,7 +53,7 @@ Migration `015_stocado_parity.sql` Stocado kolonları ve filtreleri ekler.
 
 | Değişken | Varsayılan |
 |----------|------------|
-| `PGRST_JWT_SECRET` | `navlun-dev-jwt-secret-min-32-chars!!` |
-| DB | `postgres://navlun:navlun@localhost:5432/navlun` |
+| `NAVLUN_PGRST_JWT_SECRET` | `navlun-dev-jwt-secret-min-32-chars!!` |
+| DB | `postgres://navlun:navlun@localhost:5433/navlun` |
 
-`app.jwt_secret` veritabanı ayarı `PGRST_JWT_SECRET` ile aynı olmalıdır.
+`app.jwt_secret` veritabanı ayarı `NAVLUN_PGRST_JWT_SECRET` ile aynı olmalıdır.

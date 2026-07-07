@@ -13,7 +13,7 @@
 | Service | Required | Port | Notes |
 |---------|----------|------|--------|
 | Vite dev server (`portal`) | Yes (for UI work) | 5173 | `/api` → PostgREST (`vite.config.ts`) |
-| PostgreSQL + PostgREST | Yes (API) | 5432 / 3000 | `docker compose up -d` |
+| PostgreSQL + PostgREST | Yes (API) | 5433 / 3100 | `make db-up` (RetailEX ile çakışmaz) |
 
 ### Commands (from repo root)
 

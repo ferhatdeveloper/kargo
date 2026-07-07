@@ -3,7 +3,7 @@
  * PostgREST smoke test — docker compose up -d sonrası çalıştırın.
  * exit 0 = başarılı
  */
-const BASE = process.env.POSTGREST_URL || 'http://127.0.0.1:3000'
+const BASE = process.env.POSTGREST_URL || 'http://127.0.0.1:3100'
 const PASS = process.env.DEMO_PASSWORD || 'Demo123!'
 const EMAIL_CANDIDATES = [
   process.env.DEMO_EMAIL,
