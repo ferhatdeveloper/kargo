@@ -4,7 +4,7 @@ import { isPostgrest } from './config'
 function assertPostgrest() {
   if (!isPostgrest) {
     throw new Error(
-      'Navlun yalnızca PostgREST API ile çalışır. portal/.env içinde VITE_API_BACKEND=postgrest olmalıdır.',
+      'Kargom Kapında yalnızca PostgREST API ile çalışır. portal/.env içinde VITE_API_BACKEND=postgrest olmalıdır.',
     )
   }
 }

@@ -13,7 +13,7 @@ export function PlaceholderPage({ title, description }: PlaceholderPageProps) {
         <GroupTitle title={title} />
         <Text c="dimmed" size="sm">
           {description ??
-            'Bu sayfa Navlun panel iskeletine uygun olarak hazırlandı. Veri PostgREST RPC ile sunulacak.'}
+            'Bu sayfa Kargom Kapında panel iskeletine uygun olarak hazırlandı. Veri PostgREST RPC ile sunulacak.'}
         </Text>
       </Stack>
     </Card>

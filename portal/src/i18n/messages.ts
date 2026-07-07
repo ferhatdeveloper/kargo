@@ -1,7 +1,7 @@
 export type Locale = 'tr' | 'en'
 
 export const defaultLocale: Locale = 'tr'
-export const localeStorageKey = 'navlun-locale'
+export const localeStorageKey = 'kargomkapinda-locale'
 
 export const messages = {
   tr: {
@@ -23,7 +23,7 @@ export const messages = {
     'auth.passwordMismatch': 'Şifreler eşleşmiyor',
     'auth.localHint': 'Yerel veritabanı: {email1} veya {email2} — şifre {password}',
     'auth.registerTitle': 'Hesap oluşturun',
-    'auth.registerSubtitle': 'Navlun ile kargo yönetimine hemen başlayın.',
+    'auth.registerSubtitle': 'Kargom Kapında ile kargo yönetimine hemen başlayın.',
     'auth.hasAccount': 'Zaten hesabınız var mı?',
     'auth.forgotTitle': 'Şifreni sıfırla',
     'auth.forgotSubtitle': 'E-posta adresinize sıfırlama bağlantısı gönderilir.',
@@ -33,7 +33,7 @@ export const messages = {
     'locale.en': 'English',
     'brand.tagline': 'Kargo yönetiminiz tek yerde',
     'brand.lead':
-      'Navlun ile gönderilerinizi, entegrasyonlarınızı ve finansal işlemlerinizi güvenle yönetin.',
+      'Kargom Kapında ile gönderilerinizi, entegrasyonlarınızı ve finansal işlemlerinizi güvenle yönetin.',
     'brand.f1.title': 'Kargo operasyonları',
     'brand.f1.desc': 'Gönderilerinizi oluşturun, takip edin ve yönetin.',
     'brand.f2.title': 'Pazaryeri entegrasyonları',
@@ -81,7 +81,7 @@ export const messages = {
     'auth.passwordMismatch': 'Passwords do not match',
     'auth.localHint': 'Local DB: {email1} or {email2} — password {password}',
     'auth.registerTitle': 'Create your account',
-    'auth.registerSubtitle': 'Start managing shipments with Navlun.',
+    'auth.registerSubtitle': 'Start managing shipments with Kargom Kapında.',
     'auth.hasAccount': 'Already have an account?',
     'auth.forgotTitle': 'Reset your password',
     'auth.forgotSubtitle': 'We will send a reset link to your email.',
@@ -91,7 +91,7 @@ export const messages = {
     'locale.en': 'English',
     'brand.tagline': 'Your shipping operations in one place',
     'brand.lead':
-      'Manage shipments, integrations, and finances securely with Navlun.',
+      'Manage shipments, integrations, and finances securely with Kargom Kapında.',
     'brand.f1.title': 'Shipping operations',
     'brand.f1.desc': 'Create, track, and manage your shipments.',
     'brand.f2.title': 'Marketplace integrations',

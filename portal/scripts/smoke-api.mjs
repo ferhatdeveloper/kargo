@@ -7,7 +7,7 @@ const BASE = process.env.POSTGREST_URL || 'http://127.0.0.1:3100'
 const PASS = process.env.DEMO_PASSWORD || 'Demo123!'
 const EMAIL_CANDIDATES = [
   process.env.DEMO_EMAIL,
-  'demo@navlun.local',
+  'demo@kargomkapinda.local',
   'demo@stocado.local',
 ].filter(Boolean)
 

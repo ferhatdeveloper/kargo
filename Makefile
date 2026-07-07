@@ -11,13 +11,13 @@ db-reset:
 	docker compose -f docker-compose.dev.yml up -d
 
 db-logs:
-	docker compose -f docker-compose.dev.yml logs -f navlun_db navlun_postgrest
+	docker compose -f docker-compose.dev.yml logs -f kargomkapinda_db kargomkapinda_postgrest
 
 db-psql:
-	docker compose -f docker-compose.dev.yml exec navlun_db psql -U navlun -d navlun
+	docker compose -f docker-compose.dev.yml exec kargomkapinda_db psql -U kargomkapinda -d kargomkapinda
 
 db-seed:
-	docker compose -f docker-compose.dev.yml exec -T navlun_db psql -U navlun -d navlun -f /seed/seed.sql
+	docker compose -f docker-compose.dev.yml exec -T kargomkapinda_db psql -U kargomkapinda -d kargomkapinda -f /seed/seed.sql
 
 api-openapi:
 	@curl -s http://127.0.0.1:3100/ | head -20

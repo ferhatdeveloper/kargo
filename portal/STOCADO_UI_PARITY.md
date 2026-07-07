@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This document provides a detailed visual comparison between Stocado Portal (https://portal.stocado.com) and Navlun Portal (local), documenting exact differences and providing actionable CSS/theme tokens for achieving UI parity.
+This document provides a detailed visual comparison between Stocado Portal (https://portal.stocado.com) and Kargom Kapında Portal (local), documenting exact differences and providing actionable CSS/theme tokens for achieving UI parity.
 
 **Branch:** `cursor/stocado-parity-ui-90ab`
 
@@ -10,7 +10,7 @@ This document provides a detailed visual comparison between Stocado Portal (http
 
 ## Not (ürün kararı)
 
-**Giriş sayfası (`/auth/*`) Navlun split-layout olarak korunur** — Stocado tek-kolon login uygulanmaz.
+**Giriş sayfası (`/auth/*`) Kargom Kapında split-layout olarak korunur** — Stocado tek-kolon login uygulanmaz.
 
 ---
 
@@ -23,7 +23,7 @@ This document provides a detailed visual comparison between Stocado Portal (http
 - **Background:** Pure white (`#ffffff`)
 - **Branding:** Logo at top center, minimal
 
-### **Navlun (Current)**
+### **Kargom Kapında (Current)**
 - **Layout:** Split-screen two-column (hero left, form right)
 - **Left Panel:** Full-height gradient brand panel with hero illustration
 - **Form Panel:** Right side with light gray background
@@ -67,10 +67,10 @@ This document provides a detailed visual comparison between Stocado Portal (http
 - **Blue KÖ Badge:** `#0d87f7` or `#1a8fff` (bright blue)
 - **Background:** Pure white `#ffffff` (light mode)
 
-### **Navlun (Current)**
+### **Kargom Kapında (Current)**
 ```typescript
 // From theme.ts
-navlun: [
+kargomKapinda: [
   '#e8edf5',  // 0
   '#c5d0e6',  // 1
   '#9fb3d6',  // 2
@@ -140,7 +140,7 @@ export const theme = createTheme({
   - Positioned immediately next to balance badge
 - **Layout:** Badges are adjacent, no gap, top-left of header area
 
-### **Navlun (Current)**
+### **Kargom Kapında (Current)**
 - Different header structure
 - No prominent financial badges in header
 
@@ -206,7 +206,7 @@ export const theme = createTheme({
   - Background: Very light gray `#f3f4f6`
   - Text: Darker gray
 
-### **Navlun (Current)**
+### **Kargom Kapında (Current)**
 ```css
 /* AppNavbar.module.css */
 .navbar {
@@ -258,7 +258,7 @@ export const theme = createTheme({
 - **Primary Button:**
   - Background: Bright blue `#0d87f7` or `#1a8fff`
   - Color: White `#ffffff`
-  - Border Radius: ~6-8px (smaller than Navlun's `md`)
+  - Border Radius: ~6-8px (smaller than Kargom Kapında's `md`)
   - Font Weight: 600
   - Padding: Slightly compact
   - Hover: Slightly darker blue `#0b6fd6`
@@ -273,7 +273,7 @@ export const theme = createTheme({
   - Icon on left
   - Text: "Filtreler"
 
-### **Navlun (Current)**
+### **Kargom Kapında (Current)**
 ```typescript
 // theme.ts
 Button: {
@@ -338,7 +338,7 @@ Button: {
 - **Line Height:** Compact, ~1.4-1.5
 - **Letter Spacing:** Minimal, -0.01em on headings
 
-### **Navlun (Current)**
+### **Kargom Kapında (Current)**
 ```typescript
 // theme.ts
 fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif',
@@ -395,7 +395,7 @@ export const theme = createTheme({
 - **Action Buttons:** Blue circular button icons, minimal
 - **Column Alignment:** Mixed (left for text, center for statuses, right for actions)
 
-### **Navlun (Current)**
+### **Kargom Kapında (Current)**
 - Likely uses Mantine Table defaults
 - May have larger padding/spacing
 
@@ -471,7 +471,7 @@ export const theme = createTheme({
   - Hover: Light gray background `#f3f4f6`
 - **Tab Group:** Horizontal pills with small gap between tabs
 
-### **Navlun (Current)**
+### **Kargom Kapında (Current)**
 - Likely uses Mantine Pills or Tabs default styling
 - May use underline style or different active state
 
@@ -515,13 +515,13 @@ export const theme = createTheme({
 
 ### **Stocado**
 - **Border:** 1px solid `#d1d5db` (medium gray)
-- **Border Radius:** ~6px (smaller than Navlun)
+- **Border Radius:** ~6px (smaller than Kargom Kapında)
 - **Focus Border:** Blue `#0d87f7`, possibly with box-shadow
 - **Placeholder:** Light gray `#9ca3af`
 - **Padding:** ~10px 12px (compact)
 - **Font Size:** 14px
 
-### **Navlun (Current)**
+### **Kargom Kapında (Current)**
 ```typescript
 // theme.ts
 TextInput: {
@@ -730,13 +730,13 @@ NavLink: {
 ### Screenshots Captured
 
 1. **Stocado Login Page** - Simple centered form, white background
-2. **Navlun Login Page** - Split screen with hero panel and gradient
+2. **Kargom Kapında Login Page** - Split screen with hero panel and gradient
 3. **Stocado Dashboard** - Shows orange balance badge, blue KÖ badge
 4. **Stocado Cargo Table** - Shows table density, status badges, action buttons
 
 ### Color Palette Quick Reference
 
-| Element | Stocado | Navlun Current |
+| Element | Stocado | Kargom Kapında Current |
 |---------|---------|----------------|
 | Primary Button | `#0d87f7` | `#203d75` |
 | Orange Badge | `#ff8800` | N/A |
@@ -749,11 +749,11 @@ NavLink: {
 
 ## Notes
 
-- Stocado uses a **brighter, more modern** blue (`#0d87f7`) compared to Navlun's navy (`#203d75`)
+- Stocado uses a **brighter, more modern** blue (`#0d87f7`) compared to Kargom Kapında's navy (`#203d75`)
 - **Smaller border radius** throughout (6px vs 8-12px) gives a more compact feel
 - **Higher contrast** with pure white backgrounds and bright accent colors
 - **Prominent finance badges** in header are a key differentiator
 - **Compact table density** with tighter row heights and padding
 - Login page is **significantly simpler** - no elaborate hero section
 
-The main design philosophy shift is from Navlun's **professional navy/formal style** to Stocado's **bright, modern, high-contrast style** with cyan blues and vibrant accent colors.
+The main design philosophy shift is from Kargom Kapında's **professional navy/formal style** to Stocado's **bright, modern, high-contrast style** with cyan blues and vibrant accent colors.

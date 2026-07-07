@@ -540,8 +540,8 @@ export function CreateCargoPage() {
       <style>{`
         @media print {
           body * { visibility: hidden; }
-          #navlun-shipping-label, #navlun-shipping-label * { visibility: visible; }
-          #navlun-shipping-label {
+          #kargomkapinda-shipping-label, #kargomkapinda-shipping-label * { visibility: visible; }
+          #kargomkapinda-shipping-label {
             position: absolute;
             left: 0;
             top: 0;

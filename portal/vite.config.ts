@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
 
   if (backend !== 'postgrest') {
     console.warn(
-      `[vite] VITE_API_BACKEND=${backend} — Navlun yalnızca PostgREST destekler; proxy PostgREST'e yönlendiriliyor.`,
+      `[vite] VITE_API_BACKEND=${backend} — Kargom Kapında yalnızca PostgREST destekler; proxy PostgREST'e yönlendiriliyor.`,
     )
   }
 

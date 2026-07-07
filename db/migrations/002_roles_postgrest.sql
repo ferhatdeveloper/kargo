@@ -12,7 +12,7 @@ BEGIN
     CREATE ROLE service_role NOLOGIN BYPASSRLS;
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'authenticator') THEN
-    CREATE ROLE authenticator NOINHERIT LOGIN PASSWORD 'navlun_authenticator';
+    CREATE ROLE authenticator NOINHERIT LOGIN PASSWORD 'kargomkapinda_authenticator';
   END IF;
 END
 $$;

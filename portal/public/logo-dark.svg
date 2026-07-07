@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" role="img" aria-label="Navlun">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 48" role="img" aria-label="Kargom Kapında">
   <rect x="2" y="10" width="28" height="28" rx="8" fill="#C42126"/>
   <path fill="#fff" d="M10 28V20h4.2c2.4 0 3.8 1.1 3.8 3s-1.4 3-3.8 3H14v2zm4-5.2c1 0 1.5-.4 1.5-1.2s-.5-1.2-1.5-1.2H14v2.4h4z"/>
-  <text x="38" y="33" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="700" fill="#ffffff">Navlun</text>
+  <text x="38" y="32" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#ffffff">Kargom Kapında</text>
 </svg>

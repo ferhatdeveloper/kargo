@@ -37,7 +37,7 @@ const fontScale: Record<LabelSettings['font_size'], number> = {
 export function ShippingLabelPreview({
   settings,
   data,
-  printId = 'navlun-shipping-label',
+  printId = 'kargomkapinda-shipping-label',
 }: ShippingLabelPreviewProps) {
   const size = formatSizes[settings.format]
   const scale = fontScale[settings.font_size]
@@ -61,7 +61,7 @@ export function ShippingLabelPreview({
       {settings.show_logo && (
         <Group justify="space-between" mb={compact ? 6 : 10}>
           <Text fw={800} style={{ color: settings.accent_color }}>
-            Navlun
+            Kargom Kapında
           </Text>
           {data.accountName && (
             <Text size="xs" c="dimmed" ta="right">

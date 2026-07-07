@@ -93,7 +93,7 @@ export const MARKETPLACE_PROVIDERS: MarketplaceProvider[] = [
   {
     code: 'shopify',
     title: 'Shopify',
-    description: 'Shopify mağazanız için Navlun uygulamasını kurun.',
+    description: 'Shopify mağazanız için Kargom Kapında uygulamasını kurun.',
     connectable: true,
   },
   {

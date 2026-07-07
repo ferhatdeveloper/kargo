@@ -62,7 +62,7 @@ export function LoginPage() {
         {import.meta.env.DEV && isPostgrest && (
           <Text size="xs" c="dimmed" mt="sm">
             {t('auth.localHint', {
-              email1: 'demo@navlun.local',
+              email1: 'demo@kargomkapinda.local',
               email2: 'demo@stocado.local',
               password: 'Demo123!',
             })}

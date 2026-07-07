@@ -1,6 +1,6 @@
-# Navlun — PostgreSQL + PostgREST
+# Kargom Kapında — PostgreSQL + PostgREST
 
-Navlun müşteri paneli için tam veritabanı şeması. Tablolar `public` şemasında; API katmanı **PostgREST** ile sunulur.
+Kargom Kapında müşteri paneli için tam veritabanı şeması. Tablolar `public` şemasında; API katmanı **PostgREST** ile sunulur.
 
 ## Hızlı başlangıç
 
@@ -12,15 +12,15 @@ docker compose -f docker-compose.dev.yml ps
 
 | Servis     | Port | Açıklama        |
 |-----------|------|-----------------|
-| PostgreSQL | 5433 | `navlun` / `navlun` |
+| PostgreSQL | 5433 | `kargomkapinda` / `kargomkapinda` |
 | PostgREST  | 3100 | REST + OpenAPI  |
 
-**Demo giriş:** `demo@navlun.local` / `Demo123!`
+**Demo giriş:** `demo@kargomkapinda.local` / `Demo123!`
 
 ```bash
 curl -s -X POST http://127.0.0.1:3100/rpc/auth_login \
   -H 'Content-Type: application/json' \
-  -d '{"p_email":"demo@navlun.local","p_password":"Demo123!","p_remember":false}'
+  -d '{"p_email":"demo@kargomkapinda.local","p_password":"Demo123!","p_remember":false}'
 ```
 
 OpenAPI: http://127.0.0.1:3100/
@@ -53,7 +53,7 @@ Migration `015_stocado_parity.sql` Stocado kolonları ve filtreleri ekler.
 
 | Değişken | Varsayılan |
 |----------|------------|
-| `NAVLUN_PGRST_JWT_SECRET` | `navlun-dev-jwt-secret-min-32-chars!!` |
-| DB | `postgres://navlun:navlun@localhost:5433/navlun` |
+| `KARGOMKAPINDA_PGRST_JWT_SECRET` | `kargomkapinda-dev-jwt-secret-min-32-chars!!` |
+| DB | `postgres://kargomkapinda:kargomkapinda@localhost:5433/kargomkapinda` |
 
-`app.jwt_secret` veritabanı ayarı `NAVLUN_PGRST_JWT_SECRET` ile aynı olmalıdır.
+`app.jwt_secret` veritabanı ayarı `KARGOMKAPINDA_PGRST_JWT_SECRET` ile aynı olmalıdır.

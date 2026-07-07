@@ -1,45 +1,45 @@
 # Yerel geliştirme — RetailEX ile port çakışması yok
 # RetailEX: postgres :5432, PostgREST :3002–:3020, web :8080
-# Navlun dev: postgres :5433, PostgREST :3100
+# Kargom Kapında dev: postgres :5433, PostgREST :3100
 #
 # Kullanım: docker compose -f docker-compose.dev.yml up -d
 services:
-  navlun_db:
+  kargomkapinda_db:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: navlun
-      POSTGRES_PASSWORD: navlun
-      POSTGRES_DB: navlun
+      POSTGRES_USER: kargomkapinda
+      POSTGRES_PASSWORD: kargomkapinda
+      POSTGRES_DB: kargomkapinda
     ports:
       - '5433:5432'
     volumes:
-      - navlun_pg_data_dev:/var/lib/postgresql/data
+      - kargomkapinda_pg_data_dev:/var/lib/postgresql/data
       - ./db/migrations:/migrations:ro
       - ./db/seed:/seed:ro
       - ./db/init/00-run-migrations.sh:/docker-entrypoint-initdb.d/00-run-migrations.sh:ro
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U navlun -d navlun']
+      test: ['CMD-SHELL', 'pg_isready -U kargomkapinda -d kargomkapinda']
       interval: 5s
       timeout: 5s
       retries: 10
 
-  navlun_postgrest:
+  kargomkapinda_postgrest:
     image: postgrest/postgrest:v12.2.3
     restart: unless-stopped
     depends_on:
-      navlun_db:
+      kargomkapinda_db:
         condition: service_healthy
     ports:
       - '3100:3000'
     environment:
-      PGRST_DB_URI: postgres://authenticator:navlun_authenticator@navlun_db:5432/navlun
+      PGRST_DB_URI: postgres://authenticator:kargomkapinda_authenticator@kargomkapinda_db:5432/kargomkapinda
       PGRST_DB_SCHEMAS: public
       PGRST_DB_ANON_ROLE: anon
       PGRST_DB_EXTRA_SEARCH_PATH: public,audit
-      PGRST_JWT_SECRET: navlun-dev-jwt-secret-min-32-chars!!
+      PGRST_JWT_SECRET: kargomkapinda-dev-jwt-secret-min-32-chars!!
       PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3100
       PGRST_DB_MAX_ROWS: '1000'
 
 volumes:
-  navlun_pg_data_dev:
+  kargomkapinda_pg_data_dev:

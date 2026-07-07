@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
   },
 })
 
-const colorSchemeManager = localStorageColorSchemeManager({ key: 'navlun-color-scheme' })
+const colorSchemeManager = localStorageColorSchemeManager({ key: 'kargomkapinda-color-scheme' })
 
 export default function App() {
   return (

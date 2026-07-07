@@ -4,8 +4,8 @@
 
 ### Repository layout
 
-- Ürün adı: **Navlun** (rakip marka adları UI’da kullanılmaz).
-- **`portal/`** — Navlun müşteri paneli (React 19, Vite 8, Mantine 9, React Router 7).
+- Ürün adı: **Kargom Kapında** (rakip marka adları UI’da kullanılmaz).
+- **`portal/`** — Kargom Kapında müşteri paneli (React 19, Vite 8, Mantine 9, React Router 7).
 - **`db/`** — PostgreSQL + PostgREST.
 
 ### Services
@@ -28,18 +28,18 @@ All commands run inside `portal/` — see root `README.md`.
 ### Environment
 
 - **API:** yalnızca PostgREST — `portal/.env`: `VITE_API_BACKEND=postgrest`, `VITE_API_BASE_URL=/api` (bkz. `.env.example`)
-- Yerel giriş: `demo@navlun.local` / `Demo123!` (`docker compose up -d` gerekir)
+- Yerel giriş: `demo@kargomkapinda.local` / `Demo123!` (`docker compose up -d` gerekir)
 - Oturum token’larını repoya commit etmeyin.
 
 ### Veritabanı (PostgreSQL + PostgREST)
 
-- Demo: `demo@navlun.local` / `Demo123!`
+- Demo: `demo@kargomkapinda.local` / `Demo123!`
 - PostgREST 12: JWT `request.jwt.claims` (`auth_user_id()`)
 
 ### Hello-world / smoke test
 
 1. `cd portal && npm run dev`
-2. `/auth/login` — Navlun markası; dil TR/EN seçici ile değişir
+2. `/auth/login` — Kargom Kapında markası; dil TR/EN seçici ile değişir
 3. Yerel DB: `make db-up` + `POST /rpc/auth_login`
 
 ### tmux
